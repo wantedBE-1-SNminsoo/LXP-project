@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LxpProjectApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LxpProjectApplication.class, args);
+
+        SpringApplication.run(LxpProjectApplication.class, args);
+
 	}
 
 }
