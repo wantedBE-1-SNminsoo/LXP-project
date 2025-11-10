@@ -10,7 +10,7 @@ public class CourseResponse {
     private String title;
     private String description;
     private BigDecimal price;
-    private String status;
+    private String courseStatus;  // 수정된 필드명 반영
     private LocalDateTime createdAt;
 
     public CourseResponse(Course course) {
@@ -18,7 +18,9 @@ public class CourseResponse {
         this.title = course.getTitle();
         this.description = course.getDescription();
         this.price = course.getPrice();
-        this.status = course.getStatus();
+        this.courseStatus = course.getCourseStatus();
         this.createdAt = course.getCreatedAt();
     }
+
+    // Getter 메서드 필요 시 추가
 }

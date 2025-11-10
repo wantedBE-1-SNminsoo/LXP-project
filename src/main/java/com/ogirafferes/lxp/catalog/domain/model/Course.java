@@ -4,12 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
-/**
- * 강좌 정보를 저장하는 엔티티
- */
-@Entity                                 // JPA 테이블과 매핑
-@Table(name = "course")                 // 실제 DB의 테이블명 지정
+@Entity
+@Table(name = "courses")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,25 +15,30 @@ import java.time.LocalDateTime;
 @Builder
 public class Course {
 
-    @Id                                  // 기본키(Primary Key)
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO_INCREMENT
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
     private Long id;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(nullable = false)
-    private String status;
+    @Column(name = "course_status", nullable = false)
+    private String courseStatus;  // 변경된 컬럼명 반영
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OrderBy("lectureOrder ASC")  // 강의 순서 정렬
+    private List<Lecture> lectures;
 }

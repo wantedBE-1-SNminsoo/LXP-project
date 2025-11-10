@@ -2,38 +2,47 @@ package com.ogirafferes.lxp.catalog.presentation.http;
 
 import com.ogirafferes.lxp.catalog.application.CourseCatalogService;
 import com.ogirafferes.lxp.catalog.domain.model.Course;
-import com.ogirafferes.lxp.catalog.presentation.dto.CourseResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.stream.Collectors;
 
-@RestController                          // REST API 컨트롤러임 명시
-@RequestMapping("/api/courses")           // URL Prefix
+import java.util.List;
+
+@Controller
+@RequestMapping("/courses")
 @RequiredArgsConstructor
 public class CourseController {
 
-    private final CourseCatalogService courseService;
+    private final CourseCatalogService courseCatalogService;
 
-    @PostMapping
-    public CourseResponse createCourse(@RequestBody Course course) {
-        return new CourseResponse(courseService.createCourse(course));
-    }
-
+    // 강좌 목록 페이지
     @GetMapping
-    public List<CourseResponse> getAllCourses() {
-        return courseService.getAllCourses().stream()
-                .map(CourseResponse::new)
-                .collect(Collectors.toList());
+    public String list(Model model) {
+        List<Course> courses = courseCatalogService.getAllCourses();
+        model.addAttribute("courses", courses);
+        return "catalog/course-list";
     }
 
-    @GetMapping("/{id}")
-    public CourseResponse getCourseById(@PathVariable Long id) {
-        return new CourseResponse(courseService.getCourseDetail(id));
+    // 강좌 상세 페이지
+    @GetMapping("/{courseId}")
+    public String detail(@PathVariable Long courseId, Model model) {
+        Course course = courseCatalogService.getCourseDetail(courseId);
+        model.addAttribute("course", course);
+        return "catalog/course-detail";
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteCourse(@PathVariable Long id) {
-        courseService.deleteCourse(id);
+    // 신규 강좌 등록 폼
+    @GetMapping("/new")
+    public String createForm(Model model) {
+        model.addAttribute("course", new Course());
+        return "catalog/course-form";
+    }
+
+    // 신규 강좌 등록 처리
+    @PostMapping
+    public String create(@ModelAttribute Course course) {
+        courseCatalogService.createCourse(course);
+        return "redirect:/courses";
     }
 }
