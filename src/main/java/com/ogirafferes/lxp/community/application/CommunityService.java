@@ -31,17 +31,33 @@ public class CommunityService {
     }
 
     @Transactional
-    public Post update(Long id, Post newPost){
+    public Post update(Long postId, Long loginUserId, Post newPost){
 
-        Post post = postRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("게시글을 찾을 수가 없습니다." + id));
+        Post post = postRepository.findById(postId).orElseThrow(()-> new IllegalArgumentException("게시글을 찾을 수가 없습니다." + postId));
 
-        post.setPostType(post.getPostType());
-        post.setTitle(post.getTitle());
-        post.setContent(post.getContent());
+        if (!post.getAuthorId().equals(loginUserId)) {
+            throw new IllegalStateException("본인 글만 수정할 수 있습니다.");
+        }
+
+        post.setPostType(newPost.getPostType());
+        post.setTitle(newPost.getTitle());
+        post.setContent(newPost.getContent());
         post.setUpdatedAt(LocalDateTime.now());
 
         return post;
 
+    }
+
+    @Transactional
+    public void delete(Long postId, Long loginUserId) {
+
+        Post post = postRepository.findById(postId).orElseThrow(()-> new IllegalArgumentException("게시글을 찾을 수가 없습니다." + postId));
+
+        if (!post.getAuthorId().equals(loginUserId)) {
+            throw new IllegalStateException("본인 글만 삭제할 수 있습니다.");
+        }
+
+        postRepository.delete(post);
     }
 
 }

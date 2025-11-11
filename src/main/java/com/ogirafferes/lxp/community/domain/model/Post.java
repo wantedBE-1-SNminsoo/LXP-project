@@ -31,7 +31,7 @@ public class Post {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "post_type")
+    @Column(name = "post_type_id")
     private String postType;
 
     @Column(name = "created_at")
