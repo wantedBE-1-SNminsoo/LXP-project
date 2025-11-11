@@ -1,9 +1,11 @@
 package com.ogirafferes.lxp.catalog.application;
 
-import com.ogirafferes.lxp.catalog.domain.model.*;
+import com.ogirafferes.lxp.catalog.domain.model.Category;
+import com.ogirafferes.lxp.catalog.domain.model.Course;
+import com.ogirafferes.lxp.catalog.domain.model.CourseStatus;
+import com.ogirafferes.lxp.catalog.domain.model.Lecture;
 import com.ogirafferes.lxp.catalog.domain.repository.CategoryRepository;
 import com.ogirafferes.lxp.catalog.domain.repository.CourseRepository;
-import com.ogirafferes.lxp.catalog.domain.service.CourseDomainService;
 import com.ogirafferes.lxp.catalog.presentation.dto.CourseCreateRequest;
 import com.ogirafferes.lxp.identity.domain.model.User;
 import com.ogirafferes.lxp.identity.domain.repository.UserRepository;
@@ -21,15 +23,13 @@ import java.util.List;
 public class CourseCatalogService {
 
     private final CourseRepository courseRepository;
-    private final CourseDomainService courseDomainService;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;  // 주입받은 인스턴스
 
-    // 강좌 전체 조회
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
     }
 
-    // 강좌 상세 조회
     public Course getCourseDetail(Long courseId) {
         return courseRepository.findById(courseId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강좌입니다."));
@@ -46,14 +46,14 @@ public class CourseCatalogService {
         return courseRepository.findAllByStatusWithDetails(CourseStatus.ACTIVE);
     }
 
-
-    // 강좌 생성
+    // 강좌 생성 (수정됨)
     @Transactional
     public Course createCourse(CourseCreateRequest request) {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."));
 
-        User instructor = UserRepository.findById(request.getInstructorId())
+        // 수정: userRepository 인스턴스 사용 (소문자 시작)
+        User instructor = userRepository.findById(request.getInstructorId())
                 .orElseThrow(() -> new IllegalArgumentException("강사를 찾을 수 없습니다."));
 
         Course course = Course.builder()
@@ -70,41 +70,16 @@ public class CourseCatalogService {
         return courseRepository.save(course);
     }
 
-    // 강좌 활성화 (도메인 서비스 활용)
-    @Transactional
-    public void activateCourse(Long courseId) {
-        Course course = getCourseDetail(courseId);
-        courseDomainService.activateCourse(course);
-        courseRepository.save(course);
-    }
-
-    // 강좌 비활성화
-    @Transactional
-    public void deactivateCourse(Long courseId) {
-        Course course = getCourseDetail(courseId);
-        courseDomainService.deactivateCourse(course);
-        courseRepository.save(course);
-    }
-
-
     @Transactional
     public Course updateCourse(Long courseId, String title, String description, BigDecimal price) {
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강좌입니다."));
-
+        Course course = getCourseDetail(courseId);
         course.updateInfo(title, description, price);
         return course;
     }
 
-
     @Transactional
     public void addLectureToCourse(Long courseId, Lecture lecture) {
-        Course course = courseRepository.findByIdWithLectures(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강좌입니다."));
-
+        Course course = getCourseWithLectures(courseId);
         course.addLecture(lecture);
     }
-
-
-
 }
