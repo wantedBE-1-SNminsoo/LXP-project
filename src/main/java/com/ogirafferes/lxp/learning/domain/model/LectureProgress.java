@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Table(name = "lecture_progresses",
         uniqueConstraints = @UniqueConstraint(columnNames = {"enrollment_id", "lecture_id"}))
 @Getter
-@Setter
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

@@ -7,28 +7,24 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "enrollments")
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)  // JPA용 프로텍티드 기본생성자
+@AllArgsConstructor(access = AccessLevel.PRIVATE)    // 외부 직접 호출 제한
 @Builder
 public class Enrollment {
-
+  /// 외래키 ID 칼럼을 필드로 관리
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "enrollment_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private com.ogirafferes.lxp.identity.domain.model.User user;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id", nullable = false)
-    private com.ogirafferes.lxp.catalog.domain.model.Course course;
+    @Column(name = "course_id", nullable = false)
+    private Long courseId;
 
-    @OneToOne
-    @JoinColumn(name = "payment_item_id", unique = true)
-    private com.ogirafferes.lxp.sales.domain.model.PaymentItem paymentItem;
+    @Column(name = "payment_item_id", unique = true)
+    private Long paymentItemId;
 
     @Column(name = "enrollment_status", nullable = false)
     private String enrollmentStatus;
@@ -41,4 +37,6 @@ public class Enrollment {
 
     @Column(name = "completed_at")
     private LocalDateTime completedAt;
+
+    // 필요 시 생성자, 상태 변경 메서드 등 도메인 행위 추가 가능
 }
