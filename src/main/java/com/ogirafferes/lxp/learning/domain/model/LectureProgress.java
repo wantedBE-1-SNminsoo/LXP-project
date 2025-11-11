@@ -8,9 +8,8 @@ import java.time.LocalDateTime;
 @Table(name = "lecture_progresses",
         uniqueConstraints = @UniqueConstraint(columnNames = {"enrollment_id", "lecture_id"}))
 @Getter
-
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class LectureProgress {
 
