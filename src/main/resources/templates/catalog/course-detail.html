@@ -1,27 +1,42 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${course.title} + ' 상세'">강좌 상세</title>
+    <meta charset="UTF-8">
+    <title>강좌 상세</title>
 </head>
 <body>
 <h1 th:text="${course.title}">강좌 제목</h1>
-<p><strong>설명:</strong> <span th:text="${course.description}"></span></p>
-<p><strong>가격:</strong> <span th:text="${course.price}"></span></p>
-<p><strong>상태:</strong> <span th:text="${course.courseStatus}"></span></p>
-<p><strong>최종 업데이트:</strong> <span th:text="${#dates.format(course.updatedAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+
+<div>
+    <p><strong>설명:</strong> <span th:text="${course.description}">강좌 설명</span></p>
+    <p><strong>가격:</strong> <span th:text="${course.price}">50000</span></p>
+    <p><strong>상태:</strong> <span th:text="${course.courseStatus}">ACTIVE</span></p>
+    <p><strong>카테고리:</strong> <span th:text="${course.category?.name}">프로그래밍</span></p>
+    <p><strong>강사:</strong> <span th:text="${course.instructor?.nickname}">강사명</span></p>
+    <p><strong>생성일:</strong> <span th:text="${#temporals.format(course.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+</div>
 
 <h2>강의 목록</h2>
 <table border="1">
+    <thead>
     <tr>
         <th>순서</th>
-        <th>강의 제목</th>
-        <th>학습</th>
+        <th>강의명</th>
+        <th>URL</th>
     </tr>
+    </thead>
+    <tbody>
     <tr th:each="lecture : ${course.lectures}">
-        <td th:text="${lecture.lectureOrder}"></td>
-        <td th:text="${lecture.title}"></td>
-        <td><a th:href="@{'/lectures/' + ${lecture.id}}">강의 보기</a></td>
+        <td th:text="${lecture.lectureOrder}">1</td>
+        <td th:text="${lecture.title}">강의 제목</td>
+        <td th:text="${lecture.contentUrl}">URL</td>
     </tr>
+    </tbody>
 </table>
+
+<div>
+    <a th:href="@{/courses/{id}/edit(id=${course.id})}">수정</a>
+    <a href="/courses">목록으로</a>
+</div>
 </body>
 </html>

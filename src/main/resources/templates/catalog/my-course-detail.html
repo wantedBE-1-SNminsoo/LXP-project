@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>강의 관리</title>
+</head>
+<body>
+<h1 th:text="${course.title}">강좌명</h1>
+<p><strong>상태:</strong> <span th:text="${course.courseStatus}"></span></p>
+
+<h2>강의 목록</h2>
+<a th:href="@{/my/courses/{id}/lectures/new(id=${course.id})}">강의 추가</a>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>순서</th>
+        <th>강의명</th>
+        <th>URL</th>
+        <th>관리</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="lecture : ${course.lectures}">
+        <td th:text="${lecture.lectureOrder}">1</td>
+        <td th:text="${lecture.title}">강의명</td>
+        <td th:text="${lecture.contentUrl}">URL</td>
+        <td>
+            <form th:action="@{/my/courses/{cid}/lectures/{lid}/delete(cid=${course.id},lid=${lecture.id})}"
+                  method="post" style="display:inline;">
+                <button type="submit">삭제</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a href="/my/courses">강좌 목록으로</a>
+</body>
+</html>

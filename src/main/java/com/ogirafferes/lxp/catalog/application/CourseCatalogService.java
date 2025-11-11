@@ -82,4 +82,11 @@ public class CourseCatalogService {
         Course course = getCourseWithLectures(courseId);
         course.addLecture(lecture);
     }
+    // 강사별 강좌 목록 조회
+    @Transactional(readOnly = true)
+    public List<Course> getCoursesByInstructor(Long instructorId) {
+        return courseRepository.findByInstructorId(instructorId);
+    }
+
+
 }
