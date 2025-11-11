@@ -1,14 +1,12 @@
 package com.ogirafferes.lxp.catalog.application;
 
-import com.ogirafferes.lxp.catalog.domain.model.Category;
-import com.ogirafferes.lxp.catalog.domain.model.Course;
-import com.ogirafferes.lxp.catalog.domain.model.CourseStatus;
-import com.ogirafferes.lxp.catalog.domain.model.Lecture;
+import com.ogirafferes.lxp.catalog.domain.model.*;
 import com.ogirafferes.lxp.catalog.domain.repository.CategoryRepository;
 import com.ogirafferes.lxp.catalog.domain.repository.CourseRepository;
 import com.ogirafferes.lxp.catalog.domain.service.CourseDomainService;
 import com.ogirafferes.lxp.catalog.presentation.dto.CourseCreateRequest;
 import com.ogirafferes.lxp.identity.domain.model.User;
+import com.ogirafferes.lxp.identity.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,9 +35,16 @@ public class CourseCatalogService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강좌입니다."));
     }
 
+    @Transactional(readOnly = true)
+    public Course getCourseWithLectures(Long courseId) {
+        return courseRepository.findByIdWithLectures(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강좌입니다."));
+    }
 
-
-
+    @Transactional(readOnly = true)
+    public List<Course> getActiveCourses() {
+        return courseRepository.findAllByStatusWithDetails(CourseStatus.ACTIVE);
+    }
 
 
     // 강좌 생성
@@ -48,7 +53,7 @@ public class CourseCatalogService {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."));
 
-        User instructor = userRepository.findById(request.getInstructorId())
+        User instructor = UserRepository.findById(request.getInstructorId())
                 .orElseThrow(() -> new IllegalArgumentException("강사를 찾을 수 없습니다."));
 
         Course course = Course.builder()
@@ -91,11 +96,6 @@ public class CourseCatalogService {
         return course;
     }
 
-    @Transactional(readOnly = true)
-    public Course getCourseWithLectures(Long courseId) {
-        return courseRepository.findByIdWithLectures(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강좌입니다."));
-    }
 
     @Transactional
     public void addLectureToCourse(Long courseId, Lecture lecture) {
@@ -105,9 +105,6 @@ public class CourseCatalogService {
         course.addLecture(lecture);
     }
 
-    @Transactional(readOnly = true)
-    public List<Course> getActiveCourses() {
-        return courseRepository.findAllByStatusWithDetails(CourseStatus.ACTIVE);
-    }
+
 
 }
