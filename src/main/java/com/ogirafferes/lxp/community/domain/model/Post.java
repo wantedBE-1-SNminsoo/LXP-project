@@ -32,7 +32,7 @@ public class Post {
     private String content;
 
     @Column(name = "post_type_id")
-    private String postType;
+    private Long postTypeId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -42,13 +42,22 @@ public class Post {
 
     public Post() {}
 
-    public Post(Long postId, Long authorId, String title, String content, String postType, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.postId = postId;
-        this.authorId = authorId;
+    public static Post create(Long authorId, String title, String content, Long postTypeId){
+        Post post = new Post();
+
+        post.authorId = authorId;
+        post.title = title;
+        post.content = content;
+        post.postTypeId = postTypeId;
+        post.createdAt = LocalDateTime.now();
+        post.updatedAt = LocalDateTime.now();
+        return post;
+    }
+
+    public void update(String title, String content, Long postTypeId){
         this.title = title;
         this.content = content;
-        this.postType = postType;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.postTypeId = postTypeId;
+        this.updatedAt = LocalDateTime.now();
     }
 }

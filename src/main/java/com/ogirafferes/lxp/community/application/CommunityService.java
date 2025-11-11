@@ -2,6 +2,7 @@ package com.ogirafferes.lxp.community.application;
 
 import com.ogirafferes.lxp.community.domain.model.Post;
 import com.ogirafferes.lxp.community.domain.repository.PostRepository;
+import com.ogirafferes.lxp.community.presentation.dto.CreatePostRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -21,31 +22,29 @@ public class CommunityService {
         return postRepository.findAll();
     }
 
-    public Post create(Long userId, Post post){
-
-        post.setAuthorId(userId);
-        post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(LocalDateTime.now());
+    @Transactional
+    public Post create(Long userId, CreatePostRequest createPostRequest){
+        Post post = Post.create(userId,createPostRequest.getTitle(),createPostRequest.getContent(),createPostRequest.getPostTypeId());
 
         return postRepository.save(post);
     }
 
     @Transactional
-    public Post update(Long postId, Long loginUserId, Post newPost){
+    public Post update(Long postId, Long loginUserId, CreatePostRequest createPostRequest){
 
         Post post = postRepository.findById(postId).orElseThrow(()-> new IllegalArgumentException("게시글을 찾을 수가 없습니다." + postId));
 
         if (!post.getAuthorId().equals(loginUserId)) {
             throw new IllegalStateException("본인 글만 수정할 수 있습니다.");
         }
-
-        post.setPostType(newPost.getPostType());
-        post.setTitle(newPost.getTitle());
-        post.setContent(newPost.getContent());
-        post.setUpdatedAt(LocalDateTime.now());
-
+        post.update(createPostRequest.getTitle(),createPostRequest.getContent(),createPostRequest.getPostTypeId());
         return post;
 
+    }
+
+    @Transactional
+    public Post findById(Long postId){
+        return postRepository.findById(postId).orElseThrow(()-> new IllegalArgumentException("게시글을 찾을 수가 없습니다." + postId));
     }
 
     @Transactional
