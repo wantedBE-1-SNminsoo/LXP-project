@@ -3,8 +3,8 @@ package com.ogirafferes.lxp.community.presentation.http;
 import com.ogirafferes.lxp.community.application.CommunityService;
 import com.ogirafferes.lxp.community.domain.model.Post;
 import com.ogirafferes.lxp.community.presentation.dto.CreatePostRequest;
+import com.ogirafferes.lxp.identity.domain.model.User;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,21 +27,27 @@ public class PostController {
     public String findAll(Model model) {
         List<Post> posts = communityService.findAll();
         model.addAttribute("posts", posts);
-        return "post";
+        return "community/post";
     }
 
     @GetMapping("/post/new")
     public String writeCreateFrom(Model model) {
         model.addAttribute("post", new CreatePostRequest());
-        return "post-form";
+        return "community/post-form";
     }
 
     @GetMapping("/post/edit/{id}")
-    public String writeEditFrom(@PathVariable Long id, Model model) {
+    public String writeEditFrom(@PathVariable Long id, Model model, HttpSession httpSession) {
+        User loginUser = (User) httpSession.getAttribute("loginUser");
         Post post = communityService.findById(id);
+
+        if(!post.getAuthorId().equals(loginUser.getUserId())){
+            return "redirect:/post";
+        }e
+
         model.addAttribute("post", post);
 
-        return "post-edit-form";
+        return "community/post-edit-form";
     }
 
     @PostMapping("/post")
@@ -55,7 +61,7 @@ public class PostController {
     }
 
     @PostMapping("/post/{id}")
-    public String updatePost(@PathVariable Long id, CreatePostRequest createPostRequest, HttpSession session) {
+    public String updatePost(@PathVariable Long id, @ModelAttribute CreatePostRequest createPostRequest, HttpSession session) {
 
         User loginUser = (User) session.getAttribute("user");
 
