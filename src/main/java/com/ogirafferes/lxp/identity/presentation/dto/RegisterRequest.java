@@ -1,14 +1,16 @@
 package com.ogirafferes.lxp.identity.presentation.dto;
 
 import com.ogirafferes.lxp.identity.domain.model.User;
-import com.ogirafferes.lxp.identity.domain.model.UserRole;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
 @Getter
-@Builder
+@NoArgsConstructor
 public class RegisterRequest {
 
 
@@ -25,16 +27,8 @@ public class RegisterRequest {
 	@Size(max = 100, message = "닉네임은 100자 이하여야 합니다.")
 	private String nickname;
 
-	private UserRole role = UserRole.valueOf("USER"); // 기본값은 USER
-
-    public static RegisterRequest registerRequest(User user){
-        return RegisterRequest.builder()
-                .username(user.getUsername())
-                .password(null)
-                .nickname(user.getNickname())
-                .role((user.getRole()))
-                .build();
-    }
+    @NotNull(message = "역할은 필수")
+    private Long roleId;
 
 }
 

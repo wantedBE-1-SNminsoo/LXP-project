@@ -1,7 +1,6 @@
 package com.ogirafferes.lxp.identity.application.adapter;
 
 import com.ogirafferes.lxp.identity.domain.model.User;
-import com.ogirafferes.lxp.identity.domain.model.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +18,7 @@ public class UserDetailsAdapter implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+		return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
 	}
 
 	@Override

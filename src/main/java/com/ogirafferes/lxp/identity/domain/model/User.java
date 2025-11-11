@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users1")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
@@ -31,10 +31,6 @@ public class User {
 	@Column(nullable = false, length = 100)
 	private String nickname;
 
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, length = 50)
-	private UserRole role;
-
 	@Column(name = "deleted_flag", nullable = false)
 	@ColumnDefault("false")
 	private Boolean deletedFlag = false;
@@ -45,7 +41,9 @@ public class User {
 	@Column(name = "updated_at", nullable = false)
 	private LocalDateTime updatedAt;
 
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id" , nullable = false)
+    private Role role;
     @PrePersist
 	protected void onCreate() {
 		createdAt = LocalDateTime.now();
@@ -54,20 +52,20 @@ public class User {
 
 	@PreUpdate
 	protected void onUpdate() {
-		updatedAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
 	}
 
 
-    public static User register(RegisterRequest dto, PasswordEncoder encoder) {
+    public static User register(RegisterRequest dto, PasswordEncoder encoder, Role role) {
         return User.builder().
                 username(dto.getUsername()).
                 passwordHash(encoder.encode(dto.getPassword())).
                 nickname(dto.getNickname()).
-                role(dto.getRole()).
+                role(role).
                 build();
     }
 
-    private void validate(String username, String password,String nickname,UserRole role) {
+    private void validate(String username, String password, String nickname, Role role) {
         if (username == null || username.isBlank())
             throw new IllegalArgumentException("username is required");
         if (password == null || password.isBlank())
@@ -76,10 +74,11 @@ public class User {
             throw new IllegalArgumentException("nickname is required");
         if (role == null)
             throw new IllegalArgumentException("role is required");
+
     }
 
 	@Builder
-	private User(String username, String passwordHash, String nickname, UserRole role) {
+	private User(String username, String passwordHash, String nickname, Role role) {
 		validate(username, passwordHash, nickname, role);
         this.username = username;
 		this.passwordHash = passwordHash;

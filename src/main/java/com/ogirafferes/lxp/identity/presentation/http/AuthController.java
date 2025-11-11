@@ -1,11 +1,11 @@
 package com.ogirafferes.lxp.identity.presentation.http;
 
 import com.ogirafferes.lxp.identity.application.UserService;
-import com.ogirafferes.lxp.identity.domain.model.User;
-import com.ogirafferes.lxp.identity.domain.model.UserRole;
+import com.ogirafferes.lxp.identity.domain.model.Role;
+import com.ogirafferes.lxp.identity.domain.repository.RoleRepository;
 import com.ogirafferes.lxp.identity.presentation.dto.RegisterRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,14 +15,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
-// 커밋 수정확인용
-	private final UserService userService;
 
-    public AuthController(UserService userService) {
-        this.userService = userService;
-    }
+	private final UserService userService;
+    private final RoleRepository roleRepository;
 
 
     @GetMapping("/login")
@@ -33,8 +31,9 @@ public class AuthController {
 
 	@GetMapping("/register")
 	public String registerPage(Model model) {
-		model.addAttribute("registerRequest", RegisterRequest.builder().build());
-		return "register";
+        model.addAttribute("registerRequest", new RegisterRequest());
+        model.addAttribute("roles", roleRepository.findAll());
+        return "register";
 	}
 
 	@PostMapping("/register")
@@ -44,7 +43,6 @@ public class AuthController {
 		}
 
 		try {
-			UserRole role = (request.getRole());
 			userService.register(request);
 			return "redirect:/auth/login?success=true";
 		} catch (IllegalArgumentException e) {
