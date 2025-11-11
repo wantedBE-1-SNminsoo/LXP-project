@@ -1,16 +1,20 @@
 package com.ogirafferes.lxp.catalog.presentation.dto;
 
 import com.ogirafferes.lxp.catalog.domain.model.Course;
+import com.ogirafferes.lxp.catalog.domain.model.CourseStatus;
+import lombok.Getter;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Getter
 public class CourseResponse {
 
     private Long id;
     private String title;
     private String description;
     private BigDecimal price;
-    private String courseStatus;  // 수정된 필드명 반영
+    private CourseStatus courseStatus;  // Enum 타입으로 변경
     private LocalDateTime createdAt;
 
     public CourseResponse(Course course) {
@@ -21,6 +25,4 @@ public class CourseResponse {
         this.courseStatus = course.getCourseStatus();
         this.createdAt = course.getCreatedAt();
     }
-
-    // Getter 메서드 필요 시 추가
 }

@@ -2,6 +2,7 @@ package com.ogirafferes.lxp.catalog.presentation.http;
 
 import com.ogirafferes.lxp.catalog.application.CourseCatalogService;
 import com.ogirafferes.lxp.catalog.domain.model.Course;
+import com.ogirafferes.lxp.catalog.presentation.dto.CourseCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,14 +36,14 @@ public class CourseController {
     // 신규 강좌 등록 폼
     @GetMapping("/new")
     public String createForm(Model model) {
-        model.addAttribute("course", new Course());
+        model.addAttribute("courseRequest", new CourseCreateRequest());
         return "catalog/course-form";
     }
 
     // 신규 강좌 등록 처리
     @PostMapping
-    public String create(@ModelAttribute Course course) {
-        courseCatalogService.createCourse(course);
+    public String create(@ModelAttribute CourseCreateRequest courseRequest) {
+        courseCatalogService.createCourse(courseRequest);
         return "redirect:/courses";
     }
 }

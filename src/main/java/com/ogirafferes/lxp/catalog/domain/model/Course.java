@@ -65,7 +65,7 @@ public class Course {
     }
 
     // 간단한 상태 변경 메서드만 엔티티에 유지
-    public void updateBasicInfo(String title, String description, BigDecimal price) {
+    public void updateInfo(String title, String description, BigDecimal price) {
         if (title != null && !title.isBlank()) {
             this.title = title;
         }
