@@ -30,11 +30,10 @@ public class AuthController {
 		return "login";
 	}
 
-    /ㄹㄴㄹㄴㄹㄴㅇㄹ
 
 	@GetMapping("/register")
 	public String registerPage(Model model) {
-		model.addAttribute("registerRequest", new RegisterRequest());
+		model.addAttribute("registerRequest", RegisterRequest.builder().build());
 		return "register";
 	}
 
@@ -45,8 +44,8 @@ public class AuthController {
 		}
 
 		try {
-			UserRole role = UserRole.valueOf(request.getRole().toUpperCase());
-			userService.register(request.getUsername(), request.getPassword(), request.getNickname(), role);
+			UserRole role = (request.getRole());
+			userService.register(request);
 			return "redirect:/auth/login?success=true";
 		} catch (IllegalArgumentException e) {
 			bindingResult.rejectValue("username", "error.username", e.getMessage());

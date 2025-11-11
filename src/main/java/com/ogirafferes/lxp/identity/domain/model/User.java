@@ -1,5 +1,6 @@
 package com.ogirafferes.lxp.identity.domain.model;
 
+import com.ogirafferes.lxp.identity.presentation.dto.RegisterRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -45,9 +46,6 @@ public class User {
 	private LocalDateTime updatedAt;
 
 
-    public User(String username, String nickname, String encode) {
-    }
-
     @PrePersist
 	protected void onCreate() {
 		createdAt = LocalDateTime.now();
@@ -60,25 +58,29 @@ public class User {
 	}
 
 
-    public static User register(String username, String nickname, String rawPassword, PasswordEncoder encoder, UserRole role) {
+    public static User register(RegisterRequest dto, PasswordEncoder encoder) {
         return User.builder().
-                username(username).
-                passwordHash(encoder.encode(rawPassword)).
-                nickname(nickname).
-                role(role).
+                username(dto.getUsername()).
+                passwordHash(encoder.encode(dto.getPassword())).
+                nickname(dto.getNickname()).
+                role(dto.getRole()).
                 build();
     }
 
-    private void validate(String username, String password) {
+    private void validate(String username, String password,String nickname,UserRole role) {
         if (username == null || username.isBlank())
             throw new IllegalArgumentException("username is required");
         if (password == null || password.isBlank())
             throw new IllegalArgumentException("password is required");
+        if (nickname == null || nickname.isBlank())
+            throw new IllegalArgumentException("nickname is required");
+        if (role == null)
+            throw new IllegalArgumentException("role is required");
     }
 
 	@Builder
 	private User(String username, String passwordHash, String nickname, UserRole role) {
-		validate(username, passwordHash);
+		validate(username, passwordHash, nickname, role);
         this.username = username;
 		this.passwordHash = passwordHash;
 		this.nickname = nickname;

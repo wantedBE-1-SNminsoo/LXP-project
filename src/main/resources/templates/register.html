@@ -10,7 +10,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -20,7 +20,7 @@
             justify-content: center;
             padding: 20px;
         }
-        
+
         .container {
             background: white;
             border-radius: 12px;
@@ -29,28 +29,26 @@
             width: 100%;
             max-width: 450px;
         }
-        
+
         h1 {
             color: #333;
             margin-bottom: 30px;
             text-align: center;
             font-size: 28px;
         }
-        
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         label {
             display: block;
             margin-bottom: 8px;
             color: #555;
             font-weight: 500;
         }
-        
-        input[type="text"],
-        input[type="password"],
-        select {
+
+        input[type="text"], input[type="password"], select {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
@@ -58,24 +56,22 @@
             font-size: 16px;
             transition: border-color 0.3s;
         }
-        
-        input[type="text"]:focus,
-        input[type="password"]:focus,
-        select:focus {
+
+        input[type="text"]:focus, input[type="password"]:focus, select:focus {
             outline: none;
             border-color: #667eea;
         }
-        
+
         .error {
             color: #e74c3c;
             font-size: 14px;
             margin-top: 5px;
         }
-        
+
         .error-field {
             border-color: #e74c3c !important;
         }
-        
+
         button {
             width: 100%;
             padding: 12px;
@@ -88,78 +84,79 @@
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        
+
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
-        
+
         .link {
             text-align: center;
             margin-top: 20px;
             color: #666;
         }
-        
+
         .link a {
             color: #667eea;
             text-decoration: none;
             font-weight: 500;
         }
-        
+
         .link a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>회원가입</h1>
-        
-        <form th:action="@{/auth/register}" th:object="${registerRequest}" method="post">
-            <div class="form-group">
-                <label for="username">사용자명</label>
-                <input type="text" id="username" th:field="*{username}" 
-                       th:class="${#fields.hasErrors('username')} ? 'error-field'" 
-                       required autofocus>
-                <div th:if="${#fields.hasErrors('username')}" class="error" th:errors="*{username}"></div>
-            </div>
-            
-            <div class="form-group">
-                <label for="password">비밀번호</label>
-                <input type="password" id="password" th:field="*{password}" 
-                       th:class="${#fields.hasErrors('password')} ? 'error-field'" 
-                       required>
-                <div th:if="${#fields.hasErrors('password')}" class="error" th:errors="*{password}"></div>
-            </div>
-            
-            <div class="form-group">
-                <label for="nickname">닉네임</label>
-                <input type="text" id="nickname" th:field="*{nickname}" 
-                       th:class="${#fields.hasErrors('nickname')} ? 'error-field'" 
-                       required>
-                <div th:if="${#fields.hasErrors('nickname')}" class="error" th:errors="*{nickname}"></div>
-            </div>
-            
-            <div class="form-group">
-                <label for="role">권한</label>
-                <select id="role" th:field="*{role}">
-                    <option value="USER">일반 사용자</option>
-                    <option value="ADMIN">관리자</option>
-                </select>
-            </div>
-            
-            <div th:if="${#fields.hasErrors('username') and #fields.errors('username')[0]?.contains('이미 존재')}" 
-                 class="error" style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
-                <span th:errors="*{username}"></span>
-            </div>
-            
-            <button type="submit">회원가입</button>
-        </form>
-        
-        <div class="link">
-            이미 계정이 있으신가요? <a th:href="@{/auth/login}">로그인</a>
+<div class="container">
+    <h1>회원가입</h1>
+
+    <form th:action="@{/auth/register}" th:object="${registerRequest}" method="post">
+
+        <div class="form-group">
+            <label for="username">사용자명</label>
+            <input type="text" id="username" th:field="*{username}"
+                   th:classappend="${#fields.hasErrors('username')} ? ' error-field'"
+                   required autofocus>
+            <div th:if="${#fields.hasErrors('username')}" class="error" th:errors="*{username}"></div>
         </div>
+
+        <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" th:field="*{password}"
+                   th:classappend="${#fields.hasErrors('password')} ? ' error-field'"
+                   required>
+            <div th:if="${#fields.hasErrors('password')}" class="error" th:errors="*{password}"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="nickname">닉네임</label>
+            <input type="text" id="nickname" th:field="*{nickname}"
+                   th:classappend="${#fields.hasErrors('nickname')} ? ' error-field'"
+                   required>
+            <div th:if="${#fields.hasErrors('nickname')}" class="error" th:errors="*{nickname}"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="role">권한</label>
+            <select id="role" th:field="*{role}">
+                <option value="USER">일반 사용자</option>
+                <option value="ADMIN">관리자</option>
+            </select>
+        </div>
+
+        <div th:if="${#fields.hasErrors('username')}"
+             class="error"
+             style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+            <span th:errors="*{username}"></span>
+        </div>
+
+        <button type="submit">회원가입</button>
+    </form>
+
+    <div class="link">
+        이미 계정이 있으신가요? <a th:href="@{/auth/login}">로그인</a>
     </div>
+</div>
 </body>
 </html>
-

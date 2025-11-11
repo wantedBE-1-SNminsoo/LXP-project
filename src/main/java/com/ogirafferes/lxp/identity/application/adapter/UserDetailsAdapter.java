@@ -1,6 +1,7 @@
 package com.ogirafferes.lxp.identity.application.adapter;
 
 import com.ogirafferes.lxp.identity.domain.model.User;
+import com.ogirafferes.lxp.identity.domain.model.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

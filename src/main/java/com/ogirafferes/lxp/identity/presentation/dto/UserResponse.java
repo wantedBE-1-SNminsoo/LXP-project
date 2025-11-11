@@ -4,6 +4,7 @@ import com.ogirafferes.lxp.identity.domain.model.User;
 import com.ogirafferes.lxp.identity.domain.model.UserRole;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
 
@@ -18,7 +19,7 @@ public class UserResponse {
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 
-	public static UserResponse from(User user) {
+	public static UserResponse userResponse(User user) {
 		return UserResponse.builder()
 				.userId(user.getUserId())
 				.username(user.getUsername())

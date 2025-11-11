@@ -1,4 +1,4 @@
-package com.ogirafferes.lxp.identity.presentation.http;
+package com.ogirafferes.lxp.global;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
