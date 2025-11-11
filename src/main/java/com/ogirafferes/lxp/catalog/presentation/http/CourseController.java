@@ -3,12 +3,15 @@ package com.ogirafferes.lxp.catalog.presentation.http;
 import com.ogirafferes.lxp.catalog.application.CourseCatalogService;
 import com.ogirafferes.lxp.catalog.domain.model.Course;
 import com.ogirafferes.lxp.catalog.presentation.dto.CourseCreateRequest;
+import com.ogirafferes.lxp.catalog.presentation.dto.CourseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/courses")
@@ -46,4 +49,34 @@ public class CourseController {
         courseCatalogService.createCourse(courseRequest);
         return "redirect:/courses";
     }
+
+    // 강좌 수정
+    @PutMapping("/{courseId}")
+    public String update(@PathVariable Long courseId,
+                         @RequestParam String title,
+                         @RequestParam String description,
+                         @RequestParam BigDecimal price) {
+        courseCatalogService.updateCourse(courseId, title, description, price);
+        return "redirect:/courses/" + courseId;
+    }
+
+    // 강좌 상세 조회 (JSON)
+    @GetMapping("/{courseId}/details")
+    @ResponseBody
+    public CourseResponse getDetails(@PathVariable Long courseId) {
+        Course course = courseCatalogService.getCourseWithLectures(courseId);
+        return CourseResponse.from(course);
+    }
+
+    // 활성 강좌 목록 조회 (JSON)
+    @GetMapping("/active")
+    @ResponseBody
+    public List<CourseResponse> getActiveCourses() {
+        List<Course> courses = courseCatalogService.getActiveCourses();
+        return courses.stream()
+                .map(CourseResponse::from)
+                .collect(Collectors.toList());
+    }
+
+
 }
