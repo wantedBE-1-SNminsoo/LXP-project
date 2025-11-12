@@ -30,7 +30,7 @@ public class AuthController {
 		return "login";
 	}
 
-    /ㄹㄴㄹㄴㄹㄴㅇㄹ
+    //ㄹㄴㄹㄴㄹㄴㅇㄹ
 
 	@GetMapping("/register")
 	public String registerPage(Model model) {
