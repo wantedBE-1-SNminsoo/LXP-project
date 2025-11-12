@@ -41,9 +41,9 @@ public class PostController {
         User loginUser = (User) httpSession.getAttribute("loginUser");
         Post post = communityService.findById(id);
 
-        if(!post.getAuthorId().equals(loginUser.getUserId())){
+        if(!post.getAuthorId().equals(loginUser.getId())){
             return "redirect:/post";
-        }e
+        }
 
         model.addAttribute("post", post);
 
@@ -55,7 +55,7 @@ public class PostController {
 
         User loginUser = (User) session.getAttribute("user");
 
-        communityService.create(loginUser.getUserId(), createPostRequest);
+        communityService.create(loginUser.getId(), createPostRequest);
         return "redirect:/post";
 
     }
@@ -65,7 +65,7 @@ public class PostController {
 
         User loginUser = (User) session.getAttribute("user");
 
-        communityService.update(id,loginUser.getUserId(),createPostRequest);
+        communityService.update(id,loginUser.getId(),createPostRequest);
         return "redirect:/post";
     }
 
@@ -73,7 +73,7 @@ public class PostController {
     public String delete(@PathVariable Long id, HttpSession session) {
         User loginUser = (User) session.getAttribute("user");
 
-        communityService.delete(id, loginUser.getUserId());
+        communityService.delete(id, loginUser.getId());
         return "redirect:/post";
     }
 
