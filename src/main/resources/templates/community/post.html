@@ -9,14 +9,9 @@
         th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
         th { background: #f4f4f4; }
         a.btn, button.btn {
-            display: inline-block;
-            padding: 6px 12px;
-            background: #4b6cb7;
-            color: #fff;
-            text-decoration: none;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            display: inline-block; padding: 6px 12px;
+            background: #4b6cb7; color: #fff; text-decoration: none;
+            border: none; border-radius: 4px; cursor: pointer;
         }
         .btn-secondary { background: #777; }
         .btn-danger { background: #c0392b; }
@@ -47,10 +42,10 @@
         <td th:text="${post.postType != null ? post.postType.name : 'N/A'}"></td>
         <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
         <td>
-            <a class="btn-secondary btn"
-               th:href="@{'/community/post/edit/' + ${post.id}}">수정</a>
+            <a class="btn btn-secondary" th:href="@{'/community/post/edit/' + ${post.id}}">수정</a>
             <form th:action="@{'/community/post/' + ${post.id} + '/delete'}" method="post"
                   onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <button class="btn btn-danger">삭제</button>
             </form>
         </td>
@@ -60,6 +55,5 @@
     </tr>
     </tbody>
 </table>
-
 </body>
 </html>
