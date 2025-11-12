@@ -13,4 +13,5 @@ public interface LectureProgressRepository extends JpaRepository<LectureProgress
 
     // 특정 수강과 강의에 대한 진도 조회
     Optional<LectureProgress> findByEnrollmentIdAndLectureId(Long enrollmentId, Long lectureId);
+
 }
