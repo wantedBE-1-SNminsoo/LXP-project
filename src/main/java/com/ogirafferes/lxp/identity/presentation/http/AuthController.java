@@ -36,8 +36,10 @@ public class AuthController {
 	}
 
 	@PostMapping("/register")
-	public String register(@Valid @ModelAttribute RegisterRequest request, BindingResult bindingResult) {
+	public String register(@Valid @ModelAttribute RegisterRequest request, 
+							BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("roles", roleRepository.findAll());
 			return "register";
 		}
 
@@ -46,6 +48,7 @@ public class AuthController {
 			return "redirect:/auth/login?success=true";
 		} catch (IllegalArgumentException e) {
 			bindingResult.rejectValue("username", "error.username", e.getMessage());
+			model.addAttribute("roles", roleRepository.findAll());
 			return "register";
 		}
 	}
