@@ -8,13 +8,11 @@ import com.ogirafferes.lxp.sales.domain.model.Payment;
 import com.ogirafferes.lxp.sales.domain.repository.CartItemRepository;
 import com.ogirafferes.lxp.sales.domain.repository.PaymentRepository;
 import com.ogirafferes.lxp.sales.presentation.dto.RequestPayment;
-import com.ogirafferes.lxp.sales.presentation.dto.ResponseCartInfo;
 import com.ogirafferes.lxp.sales.presentation.dto.ResponsePayment;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -66,5 +64,15 @@ public class PaymentService {
         Payment savedPayment = paymentRepository.save(targetPayment);
 
         return ResponsePayment.of(savedPayment);
+    }
+
+    @Transactional(readOnly = true)
+    public ResponsePayment getPaymentResult(String orderNumber) {
+        // 1. orderNumber로 결과 조회
+        Payment loadPayment = paymentRepository.findByOrderNumber(orderNumber)
+                .orElseThrow(() -> new EntityNotFoundException("Payment not found"));
+
+        // 2. Response로 가공해서 넘겨주면 끝?
+        return ResponsePayment.of(loadPayment);
     }
 }

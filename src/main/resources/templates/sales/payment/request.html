@@ -194,6 +194,12 @@
                 <span>민수 페이</span>
             </label>
 
+            <label for="radio-account">
+                <input type="radio" name="paymentMethod" value="ACCOUNT" id="radio-account" required>
+                <div class="payment-method-icon"> 💸 </div>
+                <span>계좌 이체</span>
+            </label>
+
         </div>
 
         <button type="submit" class="btn-pay">총 [[${#numbers.formatDecimal(responseCartInfo.totalAmount, 0, 'COMMA', 0, 'POINT')}]]원 결제하기</button>
