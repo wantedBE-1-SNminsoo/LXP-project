@@ -2,11 +2,11 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>강좌 목록</title>
+    <title>활성 강좌 목록</title>
 </head>
 <body>
-<h1>전체 강좌 목록</h1>
-<a href="/courses/active">활성 강좌만 보기</a>
+<h1>활성 강좌 목록</h1>
+<a href="/courses">전체 강좌 보기</a>
 <a href="/courses/new">새 강좌 등록</a>
 
 <table border="1">
@@ -16,6 +16,7 @@
         <th>제목</th>
         <th>가격</th>
         <th>상태</th>
+        <th>카테고리</th>
         <th>상세보기</th>
     </tr>
     </thead>
@@ -25,6 +26,7 @@
         <td th:text="${course.title}">강좌 제목</td>
         <td th:text="${course.price}">50000</td>
         <td th:text="${course.courseStatus}">ACTIVE</td>
+        <td th:text="${course.category?.name}">카테고리명</td>
         <td>
             <a th:href="@{/courses/{id}(id=${course.id})}">상세보기</a>
         </td>

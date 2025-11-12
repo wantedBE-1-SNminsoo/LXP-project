@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>강좌 등록</title>
+</head>
+<body>
+<h1>새 강좌 등록</h1>
+
+<form th:action="@{/courses}" th:object="${courseRequest}" method="post">
+    <div>
+        <label for="title">강좌 제목:</label>
+        <input type="text" id="title" th:field="*{title}" required />
+    </div>
+
+    <div>
+        <label for="description">설명:</label>
+        <textarea id="description" th:field="*{description}" rows="5"></textarea>
+    </div>
+
+    <div>
+        <label for="price">가격:</label>
+        <input type="number" id="price" th:field="*{price}" step="0.01" required />
+    </div>
+
+    <div>
+        <label for="courseStatus">상태:</label>
+        <select id="courseStatus" th:field="*{courseStatus}">
+            <option value="DRAFT">작성중</option>
+            <option value="ACTIVE">활성</option>
+            <option value="INACTIVE">비활성</option>
+            <option value="ARCHIVED">보관</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="categoryId">카테고리 ID:</label>
+        <input type="number" id="categoryId" th:field="*{categoryId}" required />
+    </div>
+
+    <div>
+        <label for="instructorId">강사 ID:</label>
+        <input type="number" id="instructorId" th:field="*{instructorId}" required />
+    </div>
+
+    <button type="submit">등록</button>
+    <a href="/courses">취소</a>
+</form>
+</body>
+</html>

@@ -1,26 +1,37 @@
 package com.ogirafferes.lxp.catalog.presentation.dto;
 
 import com.ogirafferes.lxp.catalog.domain.model.Course;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
+@Getter
+@AllArgsConstructor
 public class CourseResponse {
-
     private Long id;
     private String title;
     private String description;
     private BigDecimal price;
-    private String courseStatus;  // 수정된 필드명 반영
-    private LocalDateTime createdAt;
+    private String status;
+    private String categoryName;
+    private List<LectureResponse> lectures;
 
-    public CourseResponse(Course course) {
-        this.id = course.getId();
-        this.title = course.getTitle();
-        this.description = course.getDescription();
-        this.price = course.getPrice();
-        this.courseStatus = course.getCourseStatus();
-        this.createdAt = course.getCreatedAt();
+    public static CourseResponse from(Course course) {
+        List<LectureResponse> lectures = course.getLectures().stream()
+                .map(LectureResponse::from)
+                .collect(Collectors.toList());
+
+        return new CourseResponse(
+                course.getId(),
+                course.getTitle(),
+                course.getDescription(),
+                course.getPrice(),
+                course.getCourseStatus().name(),
+                course.getCategory() != null ? course.getCategory().getName() : null,
+                lectures
+        );
     }
-
-    // Getter 메서드 필요 시 추가
 }
