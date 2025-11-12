@@ -23,7 +23,7 @@ public class User {
 	private Long id;
 
 	@Column(nullable = false, unique = true)
-	private String username;f
+	private String username;
 
 	@Column(name = "password_hash", nullable = false)
 	private String passwordHash;
