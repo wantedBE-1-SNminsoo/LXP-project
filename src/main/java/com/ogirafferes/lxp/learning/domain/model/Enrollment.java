@@ -47,7 +47,7 @@ public class Enrollment {
     private List<LectureProgress> progresses = new ArrayList<>();
 
     @Column(name = "progress_percentage", nullable = false)
-    private int progressPercentage = 0;
+    private int progressPercentage;
 
     @Column(name = "enrolled_at", nullable = false)
     private LocalDateTime enrolledAt;
