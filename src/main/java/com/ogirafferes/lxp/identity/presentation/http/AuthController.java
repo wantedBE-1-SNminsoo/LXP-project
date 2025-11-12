@@ -28,7 +28,6 @@ public class AuthController {
 		return "login";
 	}
 
-
 	@GetMapping("/register")
 	public String registerPage(Model model) {
         model.addAttribute("registerRequest", new RegisterRequest());
