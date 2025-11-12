@@ -15,7 +15,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	default boolean existsByUsername(String username) {
 		return existsByUsernameAndDeletedFlagFalse(username);
 	}
-
-    User findByUserId(Long userId);
 }
 
