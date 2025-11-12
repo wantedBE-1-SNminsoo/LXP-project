@@ -1,40 +1,24 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>게시글 작성</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 30px; }
-        label { display: block; margin-top: 10px; }
-        input[type=text], textarea, select {
-            width: 400px;
-            padding: 6px;
-            margin-top: 4px;
-        }
-        textarea { height: 200px; }
-        .btn { margin-top: 15px; background: #4b6cb7; color: #fff; border: none; padding: 8px 14px; cursor: pointer; }
-        a { margin-left: 10px; }
-    </style>
-</head>
-<body>
-<h1>게시글 작성</h1>
-
-<form th:action="@{/post}" th:object="${post}" method="post">
-    <label>제목
+<form th:action="@{/community/post}" th:object="${post}" method="post">
+    <label>제목:
         <input type="text" th:field="*{title}" required>
+        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color:red"></span>
     </label>
 
-    <label>내용
+    <label>내용:
         <textarea th:field="*{content}" required></textarea>
+        <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}" style="color:red"></span>
     </label>
 
-    <label>게시글 타입(ID)
-        <!-- 지금 DTO에 postTypeId가 String이면 그대로, Long이면 바꿔 -->
-        <input type="text" th:field="*{postTypeId}" placeholder="예: 1 또는 QNA">
+    <label>게시글 유형:
+        <select th:field="*{postTypeId}" required>
+            <option value="" disabled selected>-- 선택 --</option>
+            <option th:each="t : ${postTypes}"
+                    th:value="${t.id}"
+                    th:text="${t.name}"></option>
+        </select>
+        <span th:if="${#fields.hasErrors('postTypeId')}" th:errors="*{postTypeId}" style="color:red"></span>
     </label>
 
     <button class="btn" type="submit">등록</button>
-    <a th:href="@{/post}">목록으로</a>
+    <a th:href="@{/community/post}">취소</a>
 </form>
-</body>
-</html>
