@@ -32,20 +32,6 @@ public class PaymentService {
         this.cartService = cartService;
     }
 
-    @Transactional(readOnly = true)
-    public ResponseCartInfo buildPaymentRequest(Long userId) {
-        List<CartItem> cartItems = cartItemRepository.findAllByUserId(userId);
-        List<ResponseCartInfo.ResponseCartItem> responseCartItems =
-                cartItems.stream().map(ResponseCartInfo.ResponseCartItem::of).toList();
-        List<Long> cartItemIds = cartItems.stream().map(CartItem::getId).toList();
-
-        return ResponseCartInfo.builder()
-                .userId(userId)
-                .cartItems(responseCartItems)
-                .cartItemIds(cartItemIds)
-                .build();
-    }
-
     /**
      * 장바구니 품목 기반 결제
      * @param requestPayment 결제 요청
