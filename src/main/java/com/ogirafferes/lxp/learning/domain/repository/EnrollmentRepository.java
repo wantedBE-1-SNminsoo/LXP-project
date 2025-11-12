@@ -19,6 +19,6 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
     @Query("SELECT e FROM Enrollment e " +
             "JOIN FETCH e.course c " +
             "LEFT JOIN FETCH e.progresses lp " +
-            "WHERE e.user.userId = :userId AND c.id = :courseId")
+            "WHERE e.user.id = :userId AND c.id = :courseId")
     Optional<Enrollment> findByUserIdAndCourseIdWithProgress(Long userId, Long courseId);
 }

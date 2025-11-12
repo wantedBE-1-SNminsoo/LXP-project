@@ -49,7 +49,8 @@ public class LearningService {
             throw new IllegalArgumentException("이미 등록된 강좌입니다.");
         }
 
-        User user = userRepository.findByUserId(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new IllegalArgumentException("Course not found"));
 
@@ -94,7 +95,7 @@ public class LearningService {
                 .orElseThrow(() -> new IllegalArgumentException("Enrollment not found"));
 
         // 권한 검증
-        if (!enrollment.getUser().getUserId().equals(userId)) {
+        if (!enrollment.getUser().getId().equals(userId)) {
             throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
 

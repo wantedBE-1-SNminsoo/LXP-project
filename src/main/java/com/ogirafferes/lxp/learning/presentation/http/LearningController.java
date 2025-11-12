@@ -55,7 +55,7 @@ public class LearningController {
         Long userId = Long.parseLong(principal.getName()); // 인증정보에서 userId 추출 가정
         Enrollment enrollment = learningService.getEnrollmentById(enrollmentId);
 
-        if (!enrollment.getUser().getUserId().equals(userId)) {
+        if (!enrollment.getUser().getId().equals(userId)) {
             model.addAttribute("error", "접근 권한이 없습니다.");
             return "learning/enrollment-error";
         }
