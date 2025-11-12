@@ -43,7 +43,7 @@ public class PostController {
 
         if(!post.getAuthorId().equals(loginUser.getUserId())){
             return "redirect:/post";
-        }e
+        }
 
         model.addAttribute("post", post);
 
