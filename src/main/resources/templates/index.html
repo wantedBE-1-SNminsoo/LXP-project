@@ -1,98 +1,102 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>홈</title>
+    <title>LXP - Main</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
         }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            padding: 40px;
-            margin-top: 50px;
-        }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        
-        .user-info {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-        
-        .user-info p {
-            margin: 10px 0;
-            color: #555;
-        }
-        
-        .user-info strong {
-            color: #333;
-        }
-        
-        .btn {
-            display: inline-block;
+
+        /* ===== 메뉴바 ===== */
+        .navbar {
+            background-color: #2b2b2b;
             padding: 12px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            gap: 18px;
+        }
+        .navbar a {
             color: white;
             text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 16px;
         }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        .navbar a:hover {
+            text-decoration: underline;
         }
-        
-        .btn-danger {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+
+        /* ===== 강좌 목록 ===== */
+        .container {
+            margin: 40px auto;
+            width: 80%;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .course-card {
+            border: 1px solid #aaa;
+            padding: 20px;
+            border-radius: 6px;
+            height: 180px;
+        }
+
+        .course-card h3 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+
+        .course-card a {
+            display: inline-block;
+            margin-top: 8px;
+            color: #0066ff;
+            text-decoration: none;
+        }
+        .course-card a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>환영합니다!  </h1>
-        
-        <div sec:authorize="isAuthenticated()" class="user-info">
-            <p><strong>사용자명:</strong> <span sec:authentication="name"></span></p>
-            <p><strong>권한:</strong> 
-                <span sec:authorize="hasRole('ADMIN')">관리자</span>
-                <span sec:authorize="hasRole('USER')">일반 사용자</span>
-            </p>
+
+<!-- ✅ 상단 메뉴바 -->
+<nav class="navbar">
+    <a href="/courses">Courses</a>
+    <a href="/users/me">My Page</a>
+    <a href="/auth/login">Logout</a>
+    <a href="/community">Community</a>
+
+</nav>
+
+<!-- ✅ 강좌 목록 영역 -->
+<div class="container">
+    <div class="course-grid">
+
+        <!-- 아래 부분에 Thymeleaf 반복문이 들어갈 예정 -->
+        <div class="course-card">
+            <h3>Course Title</h3>
+            <p>Course description...</p>
+            <a href="#">자세히 보기</a>
         </div>
-        
-        <div sec:authorize="!isAuthenticated()">
-            <p>로그인이 필요합니다.</p>
-            <a th:href="@{/auth/login}" class="btn">로그인</a>
+
+        <div class="course-card">
+            <h3>Course Title</h3>
+            <p>Course description...</p>
+            <a href="#">자세히 보기</a>
         </div>
-        
-        <div sec:authorize="isAuthenticated()" style="margin-top: 20px;">
-            <form th:action="@{/logout}" method="post" style="display: inline;">
-                <button type="submit" class="btn btn-danger">로그아웃</button>
-            </form>
+
+        <div class="course-card">
+            <h3>Course Title</h3>
+            <p>Course description...</p>
+            <a href="#">자세히 보기</a>
         </div>
+
+        <!-- 필요하면 카드 증가 -->
     </div>
+</div>
+
 </body>
 </html>
-
