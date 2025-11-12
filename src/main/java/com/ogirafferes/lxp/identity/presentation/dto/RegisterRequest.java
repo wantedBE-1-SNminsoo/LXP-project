@@ -1,13 +1,18 @@
 package com.ogirafferes.lxp.identity.presentation.dto;
 
+import com.ogirafferes.lxp.identity.domain.model.User;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
+@NoArgsConstructor
 public class RegisterRequest {
+
+
 
 	@NotBlank(message = "사용자명은 필수입니다.")
 	@Size(min = 3, max = 20, message = "사용자명은 3자 이상 20자 이하여야 합니다.")
@@ -21,6 +26,8 @@ public class RegisterRequest {
 	@Size(max = 100, message = "닉네임은 100자 이하여야 합니다.")
 	private String nickname;
 
-	private String role = "USER"; // 기본값은 USER
+    @NotNull(message = "역할은 필수")
+    private Long roleId;
+
 }
 
