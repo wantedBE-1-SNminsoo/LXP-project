@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 목록</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background: #f4f4f4; }
+        a.btn, button.btn {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #4b6cb7;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        a.btn-secondary { background: #999; }
+        form { display: inline; }
+    </style>
+</head>
+<body>
+<h1>게시글 목록</h1>
+
+<a class="btn" th:href="@{/post/new}">새 글 작성</a>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>타입</th>
+        <th>작성일</th>
+        <th>액션</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="post : ${posts}">
+        <td th:text="${post.postId}">1</td>
+        <td th:text="${post.title}">제목</td>
+        <td th:text="${post.authorId}">작성자</td>
+        <td th:text="${post.postTypeId}">FREE</td>
+        <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">2025-11-11</td>
+        <td>
+            <a class="btn-secondary btn"
+               th:href="@{'/post/edit/' + ${post.postId}}">수정</a>
+
+            <form th:action="@{'/post/' + ${post.postId} + '/delete'}" method="post"
+                  onsubmit="return confirm('삭제할까요?');">
+                <button class="btn" style="background:#c0392b">삭제</button>
+            </form>
+        </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(posts)}">
+        <td colspan="6">게시글이 없습니다.</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

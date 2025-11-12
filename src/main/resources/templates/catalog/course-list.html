@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>강좌 목록</title>
+</head>
+<body>
+<h1>강좌 목록</h1>
+<a href="/courses/new">새 강좌 등록</a>
+<table border="1">
+    <tr>
+        <th>제목</th>
+        <th>가격</th>
+        <th>상태</th>
+    </tr>
+    <tr th:each="course : ${courses}">
+        <td>
+            <a th:href="@{'/courses/' + ${course.id}}" th:text="${course.title}">강좌 제목</a>
+        </td>
+        <td th:text="${course.price}">가격</td>
+        <td th:text="${course.courseStatus}">상태</td>
+    </tr>
+</table>
+</body>
+</html>
