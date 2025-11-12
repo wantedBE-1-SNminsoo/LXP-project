@@ -30,8 +30,6 @@ public class AuthController {
 		return "login";
 	}
 
-    /ㄹㄴㄹㄴㄹㄴㅇㄹ
-
 	@GetMapping("/register")
 	public String registerPage(Model model) {
 		model.addAttribute("registerRequest", new RegisterRequest());
