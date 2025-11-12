@@ -15,7 +15,7 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
-@RequestMapping("enrollment")
+@RequestMapping("/enrollment")
 @RequiredArgsConstructor
 public class LearningController {
 
