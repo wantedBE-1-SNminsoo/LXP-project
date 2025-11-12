@@ -16,7 +16,7 @@ public class Cart {
     public static List<PaymentItem> getPaymentItems(List<CartItem> cartItems) {
         return cartItems.stream().map((item) ->
             PaymentItem.createInitialPaymentItem(
-                item.getCourseId(),
+                item.getCourse().getId(),
                 Money.of(BigDecimal.valueOf(20000)))
         ).collect(Collectors.toList());
     }
