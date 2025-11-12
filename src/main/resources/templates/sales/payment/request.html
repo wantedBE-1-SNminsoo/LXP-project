@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>결제 요청</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .payment-container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .item-list div { padding: 10px 0; border-bottom: 1px dashed #eee; }
+        .total-amount { font-size: 1.2em; font-weight: bold; margin-top: 15px; border-top: 2px solid #333; padding-top: 10px; }
+        .payment-options label { display: block; margin-top: 10px; }
+        .btn-pay { display: block; width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="payment-container">
+    <h2>💳 결제 요청</h2>
+    <form th:action="@{/sales/payment/request}" method="post">
+
+        <input type="hidden" name="userId" th:value="${paymentRequest.userId}" />
+
+<!--        <input type="hidden" name="cartItemIds" th:value="${paymentRequest.cartItemIds}" />-->
+
+        <div th:each="itemId : ${paymentRequest.cartItemIds}">
+            <input type="hidden" name="cartItemIds" th:value="${itemId}" />
+        </div>
+
+        <h3>🛒 주문 상품</h3>
+        <div class="item-list">
+            <div th:each="item : ${cartItems}">
+                <span th:text="${item.productName}">상품 A</span>
+                - <span th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + '원'">10,000원</span>
+            </div>
+        </div>
+
+        <div class="total-amount">
+            최종 결제 금액: <span th:text="${#numbers.formatDecimal(paymentRequest.totalAmount, 0, 'COMMA', 0, 'POINT')} + '원'">35,000원</span>
+        </div>
+
+        <h3>결제 수단 선택</h3>
+        <div class="payment-options">
+            <label>
+                <input type="radio" name="paymentMethod" value="CARD" required> 신용카드(결제안됨)
+            </label>
+            <label>
+                <input type="radio" name="paymentMethod" value="MINSUPAY" required> 💪민수 페이
+            </label>
+        </div>
+
+        <button type="submit" class="btn-pay">결제하기</button>
+    </form>
+</div>
+
+</body>
+</html>
