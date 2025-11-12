@@ -11,7 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	default Optional<User> findByUsername(String username) {
 		return findByUsernameAndDeletedFlagFalse(username);
 	}
-	
 	default boolean existsByUsername(String username) {
 		return existsByUsernameAndDeletedFlagFalse(username);
 	}
