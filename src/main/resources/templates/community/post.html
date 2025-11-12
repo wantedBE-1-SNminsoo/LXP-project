@@ -6,7 +6,7 @@
     <style>
         body { font-family: Arial, sans-serif; margin: 30px; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
         th { background: #f4f4f4; }
         a.btn, button.btn {
             display: inline-block;
@@ -18,14 +18,15 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        a.btn-secondary { background: #999; }
+        .btn-secondary { background: #777; }
+        .btn-danger { background: #c0392b; }
         form { display: inline; }
     </style>
 </head>
 <body>
 <h1>게시글 목록</h1>
 
-<a class="btn" th:href="@{/post/new}">새 글 작성</a>
+<a class="btn" th:href="@{/community/post/new}">새 글 작성</a>
 
 <table>
     <thead>
@@ -33,25 +34,24 @@
         <th>ID</th>
         <th>제목</th>
         <th>작성자</th>
-        <th>타입</th>
+        <th>게시글 유형</th>
         <th>작성일</th>
         <th>액션</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="post : ${posts}">
-        <td th:text="${post.postId}">1</td>
-        <td th:text="${post.title}">제목</td>
-        <td th:text="${post.authorId}">작성자</td>
-        <td th:text="${post.postTypeId}">FREE</td>
-        <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">2025-11-11</td>
+        <td th:text="${post.id}"></td>
+        <td th:text="${post.title}"></td>
+        <td th:text="${post.authorId}"></td>
+        <td th:text="${post.postType != null ? post.postType.name : 'N/A'}"></td>
+        <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
         <td>
             <a class="btn-secondary btn"
-               th:href="@{'/post/edit/' + ${post.postId}}">수정</a>
-
-            <form th:action="@{'/post/' + ${post.postId} + '/delete'}" method="post"
-                  onsubmit="return confirm('삭제할까요?');">
-                <button class="btn" style="background:#c0392b">삭제</button>
+               th:href="@{'/community/post/edit/' + ${post.id}}">수정</a>
+            <form th:action="@{'/community/post/' + ${post.id} + '/delete'}" method="post"
+                  onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                <button class="btn btn-danger">삭제</button>
             </form>
         </td>
     </tr>
@@ -60,5 +60,6 @@
     </tr>
     </tbody>
 </table>
+
 </body>
 </html>
