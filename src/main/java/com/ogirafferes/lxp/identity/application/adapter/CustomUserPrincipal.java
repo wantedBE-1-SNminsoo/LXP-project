@@ -1,9 +1,11 @@
 package com.ogirafferes.lxp.identity.application.adapter;
+
 import com.ogirafferes.lxp.identity.domain.model.Role;
 import com.ogirafferes.lxp.identity.domain.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -13,16 +15,22 @@ public class CustomUserPrincipal implements UserDetails {
     private final String username;
     private final String password;
     private final Role role;
+    private final Boolean deletedFlag;
 
     public CustomUserPrincipal(User user) {
         this.userId = user.getId();
         this.username = user.getUsername();
         this.password = user.getPasswordHash();
         this.role = user.getRole();
+        this.deletedFlag = user.getDeletedFlag();
     }
 
     public Long getUserId() {
         return userId;
+    }
+
+    public Role getRole() {
+        return role;
     }
 
     @Override
@@ -30,11 +38,33 @@ public class CustomUserPrincipal implements UserDetails {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.getName()));
     }
 
-    @Override public String getPassword() { return password; }
-    @Override public String getUsername() { return username; }
-    @Override public boolean isAccountNonExpired() { return true; }
-    @Override public boolean isAccountNonLocked() { return true; }
-    @Override public boolean isCredentialsNonExpired() { return true; }
-    @Override public boolean isEnabled() { return true; }
+    @Override
+    public String getPassword() {
+        return password;
+    }
 
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return !deletedFlag;
+    }
 }
