@@ -20,10 +20,10 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
-	private Long userId;
+	private Long id;
 
 	@Column(nullable = false, unique = true)
-	private String username;
+	private String username;f
 
 	@Column(name = "password_hash", nullable = false)
 	private String passwordHash;

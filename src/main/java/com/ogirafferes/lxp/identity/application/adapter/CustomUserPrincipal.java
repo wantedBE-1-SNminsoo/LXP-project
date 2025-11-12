@@ -15,7 +15,7 @@ public class CustomUserPrincipal implements UserDetails {
     private final Role role;
 
     public CustomUserPrincipal(User user) {
-        this.userId = user.getUserId();
+        this.userId = user.getId();
         this.username = user.getUsername();
         this.password = user.getPasswordHash();
         this.role = user.getRole();
