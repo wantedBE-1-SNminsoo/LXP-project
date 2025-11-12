@@ -57,7 +57,7 @@ public class MyCourseController {
 
         // 본인 강좌인지 검증
         Long instructorId = Long.parseLong(principal.getName());
-        if (!course.getInstructor().getUserId().equals(instructorId)) {
+        if (!course.getInstructor().getId().equals(instructorId)) {
             throw new IllegalArgumentException("본인의 강좌만 관리할 수 있습니다.");
         }
 
