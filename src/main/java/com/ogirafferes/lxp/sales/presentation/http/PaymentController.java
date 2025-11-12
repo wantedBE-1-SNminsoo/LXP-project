@@ -24,7 +24,7 @@ public class PaymentController {
     }
 
     /**
-     * [GET] 장바구니 품목 결제 요청
+     * [GET] 장바구니 품목 결제 페이지 요청
      * @param model 데이터 전달 모델
      * @param principal 사용자 정보
      * @return 장바구니 품목 결제 요청 페이지
@@ -40,6 +40,11 @@ public class PaymentController {
         return "sales/payment/request";
     }
 
+    /**
+     * [POST] 장바구니 품목 기반 결제 요청
+     * @param request
+     * @return
+     */
     @PostMapping("/request")
     public String processPayment(@ModelAttribute RequestPayment request) {
         ResponsePayment result = paymentService.processPayment(request);
@@ -49,9 +54,9 @@ public class PaymentController {
 
     @GetMapping("/result/{orderNumber}")
     public String showPaymentResultPage(@PathVariable String orderNumber, Model model) {
-//        ResponsePayment result = paymentService.getPaymentResult(orderNumber);
+        ResponsePayment result = paymentService.getPaymentResult(orderNumber);
 
-//        model.addAttribute("paymentResult", result);
+        model.addAttribute("paymentResult", result);
         return "sales/payment/result";
     }
 }
