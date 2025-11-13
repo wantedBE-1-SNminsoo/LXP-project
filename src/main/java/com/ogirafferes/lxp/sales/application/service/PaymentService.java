@@ -1,5 +1,6 @@
 package com.ogirafferes.lxp.sales.application.service;
 
+import com.ogirafferes.lxp.learning.application.LearningService;
 import com.ogirafferes.lxp.sales.application.pg.PaymentGatewayClient;
 import com.ogirafferes.lxp.sales.application.pg.PaymentResult;
 import com.ogirafferes.lxp.sales.domain.model.Cart;
@@ -22,12 +23,19 @@ public class PaymentService {
     private final CartItemRepository cartItemRepository;
     private final PaymentGatewayClient paymentGatewayClient;
     private final CartService cartService;
+    private final LearningService learningService;
 
-    public PaymentService(PaymentRepository paymentRepository, CartItemRepository cartItemRepository, PaymentGatewayClient paymentGatewayClient, CartService cartService) {
+    public PaymentService(
+            PaymentRepository paymentRepository,
+            CartItemRepository cartItemRepository,
+            PaymentGatewayClient paymentGatewayClient,
+            CartService cartService,
+            LearningService learningService) {
         this.paymentRepository = paymentRepository;
         this.cartItemRepository = cartItemRepository;
         this.paymentGatewayClient = paymentGatewayClient;
         this.cartService = cartService;
+        this.learningService = learningService;
     }
 
     /**
@@ -56,6 +64,11 @@ public class PaymentService {
 
         if (result.isSuccess()) {
             targetPayment.completePayment(result.getTransactionId(), result.getPaidAt());
+
+            // 강좌 등록 요청하기
+            cartItems.forEach(cartItem ->
+                learningService.registerEnrollment(cartItem.getUser().getId(), cartItem.getCourse().getId())
+            );
             requestPayment.getCartItemIds().forEach(cartService::clearItems);
         } else {
             targetPayment.failPayment();
