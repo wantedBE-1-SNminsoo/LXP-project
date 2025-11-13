@@ -7,26 +7,7 @@
 </head>
 <body>
 
-<header class="header">
-    <div class="container">
-        <a th:href="@{/}" class="logo">LXP</a>
-        <nav class="nav">
-            <div class="nav-left">
-                <a th:href="@{/}">Home</a>
-                <a th:href="@{/courses}">Courses</a>
-                <a th:href="@{/my/courses}">내 강좌 관리</a>
-                <a th:href="@{/community/post}">Community</a>
-            </div>
-            <div class="nav-right">
-                <a th:href="@{/my_page}">My Page</a>
-                <a th:href="@{/cart}">🛒 장바구니</a>
-                <form th:action="@{/auth/logout}" method="post" style="display: inline-block;">
-                    <button type="submit" class="btn btn-secondary">Logout</button>
-                </form>
-            </div>
-        </nav>
-    </div>
-</header>
+<div th:replace="fragments/header :: headerFragment"></div>
 
 <div class="container">
     <h1>나의 강좌 관리</h1>

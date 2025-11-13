@@ -9,26 +9,7 @@
 </head>
 <body>
 
-<header class="header">
-    <div class="container">
-        <a th:href="@{/}" class="logo">LXP</a>
-        <nav class="nav">
-            <div class="nav-left">
-                <a th:href="@{/}">Home</a>
-                <a th:href="@{/courses}">Courses</a>
-                <a th:href="@{/my/courses}">내 강좌 관리</a>
-                <a th:href="@{/community/post}">Community</a>
-            </div>
-            <div class="nav-right">
-                <a th:href="@{/my_page}">My Page</a>
-                <a th:href="@{/cart}">🛒 장바구니</a>
-                <form th:action="@{/auth/logout}" method="post" style="display: inline-block;">
-                    <button type="submit" class="btn btn-secondary">Logout</button>
-                </form>
-            </div>
-        </nav>
-    </div>
-</header>
+<div th:replace="fragments/header :: headerFragment"></div>
 
 <div class="container">
     <h1>내 학습 현황</h1>
@@ -39,18 +20,18 @@
     </div>
 
     <div th:each="enrollment : ${enrollments}">
-        <a th:href="@{/courses/{courseId}(courseId=${enrollment.courseId})}" style="text-decoration: none; color: inherit;">
-            <div class="enrollment-card" style="border: 1px solid #eee; padding: 15px; margin-bottom: 10px; border-radius: 8px;">
-                <div class="course-title" th:text="${enrollment.courseTitle}" style="font-weight: bold; font-size: 1.2em;">강좌 제목</div>
+        <a th:href="@{/courses/{courseId}(courseId=${enrollment.courseId})}" class="enrollment-card-link">
+            <div class="enrollment-card">
+                <div class="course-title" th:text="${enrollment.courseTitle}">강좌 제목</div>
 
-                <div class="progress-text" style="font-size: 0.9em; color: #555; margin: 5px 0;">
+                <div class="progress-text">
                     <span th:text="${enrollment.completedLectureCount}">0</span> /
                     <span th:text="${enrollment.totalLectureCount}">0</span> 강의 완료
                     (<span th:text="${enrollment.progressPercentage}">0</span>%)
                 </div>
 
-                <div class="progress-bar" style="background: #e0e0e0; border-radius: 5px; height: 10px; overflow: hidden;">
-                    <div class="progress-fill" th:style="'width: ' + ${enrollment.progressPercentage} + '%; background: #667eea; height: 100%;'"></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" th:style="'width: ' + ${enrollment.progressPercentage} + '%;'"></div>
                 </div>
             </div>
         </a>
@@ -60,6 +41,32 @@
 
     <h2>내 게시글 (준비중)</h2>
     <!-- 향후 추가 예정 -->
+
+    <hr style="margin: 30px 0;">
+
+    <h1>내가 개설한 강좌</h1>
+
+    <div th:if="${createdCourses.isEmpty()}">
+        <p>개설한 강좌가 없습니다.</p>
+        <a href="/my/courses/new" class="btn btn-primary">새 강좌 개설하기</a>
+    </div>
+
+    <div th:each="course : ${createdCourses}">
+        <a th:href="@{/my/courses/{courseId}(courseId=${course.id})}" class="enrollment-card-link">
+            <div class="enrollment-card">
+                <div class="course-title" th:text="${course.title}">강좌 제목</div>
+                <div class="progress-text">
+                    <span th:text="${course.description}">강좌 설명</span>
+                </div>
+                <div class="progress-text">
+                    가격: <span th:text="${course.price}">0</span>원
+                </div>
+                <div class="progress-text">
+                    상태: <span th:text="${course.courseStatus}">상태</span>
+                </div>
+            </div>
+        </a>
+    </div>
 </div>
 
 </body>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Header Fragment</title>
+</head>
+<body>
+<header class="header" th:fragment="headerFragment">
+    <div class="container">
+        <a th:href="@{/}" class="logo">LXP</a>
+        <nav class="nav">
+            <div class="nav-left">
+                <a th:href="@{/}">Home</a>
+                <a th:href="@{/courses}">Courses</a>
+                <a th:href="@{/community/post}">Community</a>
+            </div>
+            <div class="nav-right">
+                <a th:href="@{/my_page}">My Page</a>
+                <a th:href="@{/cart}">🛒 장바구니</a>
+                <form th:action="@{/auth/logout}" method="post" style="display: inline-block;">
+                    <button type="submit" class="btn btn-secondary">Logout</button>
+                </form>
+            </div>
+        </nav>
+    </div>
+</header>
+</body>
+</html>
