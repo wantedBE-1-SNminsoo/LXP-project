@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -22,13 +23,19 @@ public class CartController {
 
     /**
      * [POST] 장바구니 추가 요청
-     * @param courseId
+     * @param courseId 장바구니 추가할 강좌 ID
      * @return 장바구니 추가 결과
      */
     @PostMapping("/add/{courseId}")
-    public String addToCart(@PathVariable("courseId") Long courseId, @AuthenticationPrincipal CustomUserPrincipal principal) {
+    public String addToCart(RedirectAttributes redirectAttributes, @PathVariable("courseId") Long courseId, @AuthenticationPrincipal CustomUserPrincipal principal) {
         Long signInUserId = principal.getUserId();
-        Long savedCartItemId = cartService.addToCart(signInUserId, courseId);
+
+        try {
+            Long savedCartItemId = cartService.addToCart(signInUserId, courseId);
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/courses/" + courseId;
+        }
 
         return "redirect:/cart/list";
     }

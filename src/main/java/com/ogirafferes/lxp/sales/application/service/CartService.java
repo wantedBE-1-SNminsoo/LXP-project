@@ -61,6 +61,10 @@ public class CartService {
      */
     @Transactional
     public Long addToCart(Long userId, Long courseId) {
+        if(cartItemRepository.existsByUserIdAndCourseId(userId, courseId)) {
+            throw new IllegalArgumentException("이미 장바구니에 등록된 강좌입니다.");
+        }
+
         Course course = courseCatalogService.getCourseDetail(courseId);
 
         CartItem savedCartItem = cartItemRepository.save(CartItem.from(
