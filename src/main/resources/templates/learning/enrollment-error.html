@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LXP - 오류</title>
+    <style>
+        body { 
+            margin: 0; 
+            font-family: Arial, Helvetica, sans-serif; 
+            background-color: #f5f5f5;
+        }
+        .navbar { 
+            background-color: #2b2b2b; 
+            padding: 12px 24px; 
+            display: flex; 
+            gap: 18px; 
+        }
+        .navbar a { 
+            color: white; 
+            text-decoration: none; 
+            font-size: 16px; 
+        }
+        .navbar a:hover { 
+            text-decoration: underline; 
+        }
+        .container { 
+            margin: 80px auto; 
+            width: 600px; 
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .error-icon {
+            font-size: 64px;
+            color: #ff4444;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .error-message {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .button-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn-primary {
+            background-color: #0066ff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #0052cc;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 상단 메뉴바 -->
+<nav class="navbar">
+    <a th:href="@{/}">Home</a>
+    <a th:href="@{/courses}">Courses</a>
+    <a th:href="@{/my_page}">My Page</a>
+    <a th:href="@{/community/post}">Community</a>
+</nav>
+
+<!-- 에러 메시지 영역 -->
+<div class="container">
+    <div class="error-icon">⚠️</div>
+    <h1>오류가 발생했습니다</h1>
+    <div class="error-message">
+        <p th:text="${error}" th:if="${error}">알 수 없는 오류가 발생했습니다.</p>
+        <p th:unless="${error}">요청을 처리하는 중 문제가 발생했습니다.</p>
+    </div>
+    
+    <div class="button-group">
+        <a th:href="@{/my_page}" class="btn btn-primary">내 학습 현황으로</a>
+        <a href="javascript:history.back()" class="btn btn-secondary">이전 페이지</a>
+    </div>
+</div>
+
+</body>
+</html>

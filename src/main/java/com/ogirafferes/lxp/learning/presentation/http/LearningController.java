@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/enrollment")
@@ -21,47 +20,15 @@ public class LearningController {
 
     private final LearningService learningService;
 
-    @GetMapping("/my")
-    public String listUserEnrollments(Model model, Principal principal) {
-        Long userId = Long.parseLong(principal.getName()); // 인증정보에서 userId 추출 가정
-        List<Enrollment> enrollments = learningService.getUserEnrollments(userId);
-        model.addAttribute("enrollments", enrollments);
-        return "learning/enrollment-list";
-    }
-
-    @PostMapping("/register")
-    public String registerEnrollment(Long courseId, Principal principal, Model model) {
-        Long userId = Long.parseLong(principal.getName()); // 인증정보에서 userId 추출 가정
+    @PostMapping("/{enrollmentId}/completeLecture/{lectureId}") // 해당 요청의 자연스러운 위치는 lecture 에서 complete button을 통해 redirect?
+    public String completeLecture(@PathVariable Long enrollmentId, @PathVariable Long lectureId, Principal principal, Model model) {
+        Long userId = Long.parseLong(principal.getName());
         try {
-            learningService.registerEnrollment(userId, courseId);
-            return "redirect:/enrollment/my";
+            Long courseId = learningService.completeLecture(enrollmentId, lectureId, userId);
+            return "redirect:/courses/" + courseId;
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             return "learning/enrollment-error";
         }
     }
-
-    @GetMapping("/{enrollmentId}/progress")
-    public String viewEnrollmentProgress(@PathVariable Long enrollmentId, Model model, Principal principal) {
-        Long userId = Long.parseLong(principal.getName()); // 인증정보에서 userId 추출 가정
-        EnrollmentWithProgressResponse enrollmentProgress = learningService.getEnrollmentProgress(enrollmentId,userId);
-
-        model.addAttribute("progress", enrollmentProgress);
-        return "learning/progress-detail";
-    }
-
-    @GetMapping("/{enrollmentId}")
-    public String viewEnrollmentDetail(@PathVariable Long enrollmentId, Model model, Principal principal) {
-        Long userId = Long.parseLong(principal.getName()); // 인증정보에서 userId 추출 가정
-        Enrollment enrollment = learningService.getEnrollmentById(enrollmentId);
-
-        if (!enrollment.getUser().getId().equals(userId)) {
-            model.addAttribute("error", "접근 권한이 없습니다.");
-            return "learning/enrollment-error";
-        }
-
-        model.addAttribute("enrollment", enrollment);
-        return "learning/enrollment-detail";
-    }
-
 }
