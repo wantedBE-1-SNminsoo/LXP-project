@@ -21,7 +21,7 @@
 <!-- ✅ 상단 메뉴바 (Thymeleaf 링크로 수정) -->
 <nav class="navbar">
     <a th:href="@{/courses}">Courses</a>
-    <a th:href="@{/users/me}">My Page</a>
+    <a th:href="@{/my_page}">My Page</a>
     <form th:action="@{/auth/logout}" method="post" style="display: inline;">
         <button type="submit" style="background:none; border:none; color:white; text-decoration:none; font-size:16px; font-family: Arial, Helvetica, sans-serif; cursor:pointer; padding:0;">Logout</button>
     </form>
