@@ -29,7 +29,7 @@
         </a>
 
         <form th:if="${isEnrolled == null or !isEnrolled}"
-              th:action="@{/cart/add}"
+              th:action="@{/cart/add/{courseId}(courseId=${course.id})}"
               method="post"
               style="display: inline;">
             <input type="hidden" name="courseId" th:value="${course.id}" />
