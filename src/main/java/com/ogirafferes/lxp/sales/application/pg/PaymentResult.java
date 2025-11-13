@@ -28,6 +28,14 @@ public class PaymentResult {
                 .build();
     }
 
+    public static PaymentResult createFakeFailure() {
+        return PaymentResult.builder()
+                .code(PayCode.FAIL)
+                .transactionId(UUID.randomUUID().toString())
+                .paidAt(LocalDateTime.now())
+                .build();
+    }
+
     public boolean isSuccess() {
         return this.code.equals(PayCode.SUCCESS);
     }

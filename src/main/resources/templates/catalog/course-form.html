@@ -3,68 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>강좌 등록</title>
-    <style>
-        body { margin: 0; font-family: Arial, Helvetica, sans-serif; }
-        .navbar { background-color: #2b2b2b; padding: 12px 24px; display: flex; gap: 18px; }
-        .navbar a { color: white; text-decoration: none; font-size: 16px; }
-        .navbar a:hover { text-decoration: underline; }
-        .container { margin: 40px auto; width: 80%; }
-        .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        .course-card { border: 1px solid #aaa; padding: 20px; border-radius: 6px; height: 180px; }
-        .course-card h3 { margin-top: 0; font-size: 18px; }
-        .course-card a { display: inline-block; margin-top: 8px; color: #0066ff; text-decoration: none; }
-        .course-card a:hover { text-decoration: underline; }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-<nav class="navbar">
-    <a th:href="@{/courses}">Courses</a>
-    <a th:href="@{/users/me}">My Page</a>
-    <a th:href="@{/auth/login}">Logout</a>
-    <a th:href="@{/community}">Community</a>
-    <a th:href="@{/}">Home</a>
 
-</nav>
-<h1>새 강좌 등록</h1>
+<div th:replace="fragments/header :: headerFragment"></div>
 
-<form th:action="@{/courses}" th:object="${courseRequest}" method="post">
-    <div>
-        <label for="title">강좌 제목:</label>
-        <input type="text" id="title" th:field="*{title}" required />
-    </div>
+<div class="container">
+    <h1>새 강좌 등록</h1>
 
-    <div>
-        <label for="description">설명:</label>
-        <textarea id="description" th:field="*{description}" rows="5"></textarea>
-    </div>
+    <form th:action="@{/courses}" th:object="${courseRequest}" method="post">
+        <div class="form-group">
+            <label for="title">강좌 제목:</label>
+            <input type="text" id="title" th:field="*{title}" required />
+        </div>
 
-    <div>
-        <label for="price">가격:</label>
-        <input type="number" id="price" th:field="*{price}" step="0.01" required />
-    </div>
+        <div class="form-group">
+            <label for="description">설명:</label>
+            <textarea id="description" th:field="*{description}" rows="5"></textarea>
+        </div>
 
-    <div>
-        <label for="courseStatus">상태:</label>
-        <select id="courseStatus" th:field="*{courseStatus}">
-            <option value="DRAFT">작성중</option>
-            <option value="ACTIVE">활성</option>
-            <option value="INACTIVE">비활성</option>
-            <option value="ARCHIVED">보관</option>
-        </select>
-    </div>
+        <div class="form-group">
+            <label for="price">가격:</label>
+            <input type="number" id="price" th:field="*{price}" step="0.01" required />
+        </div>
 
-    <div>
-        <label for="categoryId">카테고리 ID:</label>
-        <input type="number" id="categoryId" th:field="*{categoryId}" required />
-    </div>
+        <div class="form-group">
+            <label for="courseStatus">상태:</label>
+            <select id="courseStatus" th:field="*{courseStatus}">
+                <option value="DRAFT">작성중</option>
+                <option value="ACTIVE">활성</option>
+                <option value="INACTIVE">비활성</option>
+                <option value="ARCHIVED">보관</option>
+            </select>
+        </div>
 
-    <div>
-        <label for="instructorId">강사 ID:</label>
-        <input type="number" id="instructorId" th:field="*{instructorId}" required />
-    </div>
+        <div class="form-group">
+            <label for="categoryId">카테고리 ID:</label>
+            <input type="number" id="categoryId" th:field="*{categoryId}" required />
+        </div>
 
-    <button type="submit">등록</button>
-    <a href="/courses">취소</a>
-</form>
+        <div class="form-group">
+            <label for="instructorId">강사 ID:</label>
+            <input type="number" id="instructorId" th:field="*{instructorId}" required />
+        </div>
+
+        <button type="submit" class="btn">등록</button>
+        <a href="/courses" class="btn btn-secondary">취소</a>
+    </form>
+</div>
 </body>
 </html>

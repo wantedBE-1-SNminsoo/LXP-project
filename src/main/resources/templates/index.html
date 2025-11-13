@@ -3,48 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>LXP - Main</title>
-    <style>
-        body { margin: 0; font-family: Arial, Helvetica, sans-serif; }
-        .navbar { background-color: #2b2b2b; padding: 12px 24px; display: flex; gap: 18px; }
-        .navbar a { color: white; text-decoration: none; font-size: 16px; }
-        .navbar a:hover { text-decoration: underline; }
-        .container { margin: 40px auto; width: 80%; }
-        .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        .course-card { border: 1px solid #aaa; padding: 20px; border-radius: 6px; height: 180px; }
-        .course-card h3 { margin-top: 0; font-size: 18px; }
-        .course-card a { display: inline-block; margin-top: 8px; color: #0066ff; text-decoration: none; }
-        .course-card a:hover { text-decoration: underline; }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
 
-<!-- ✅ 상단 메뉴바 (Thymeleaf 링크로 수정) -->
-<nav class="navbar">
-    <div class="navbar-left">
-        <a th:href="@{/}">Home</a>
-        <a th:href="@{/courses}">Courses</a>
-        <a th:href="@{/my/courses}">내 강좌 관리</a>
-        <a th:href="@{/community/post}">Community</a>
-    </div>
-    <div class="navbar-right">
-        <a th:href="@{/my_page}">My Page</a>
-        <a th:href="@{/cart}" class="cart-btn">🛒 장바구니</a>
-      <form th:action="@{/auth/logout}" method="post" style="display: inline;">
-        <button type="submit" style="background:none; border:none; color:white; text-decoration:none; font-size:16px; font-family: Arial, Helvetica, sans-serif; cursor:pointer; padding:0;">Logout</button>
-    </form>
+<div th:replace="fragments/header :: headerFragment"></div>
 
-    </div>
-</nav>
-
-<!-- ✅ 강좌 목록 영역 (Thymeleaf 반복문 적용) -->
 <div class="container">
+    <h2>Courses</h2>
     <div class="course-grid">
-
         <!-- 컨트롤러에서 전달받은 courses를 반복하여 표시 -->
         <div class="course-card" th:each="course : ${courses}">
             <h3 th:text="${course.title}">Course Title</h3>
             <p th:text="${course.description}">Course description...</p>
-            <a th:href="@{/courses/{id}(id=${course.id})}">자세히 보기</a>
+            <a th:href="@{/courses/{id}(id=${course.id})}" class="btn btn-primary">자세히 보기</a>
         </div>
 
         <!-- 만약 강좌가 없다면 보여줄 메시지 (선택 사항) -->

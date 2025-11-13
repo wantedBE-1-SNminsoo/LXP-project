@@ -4,35 +4,12 @@
     <meta charset="UTF-8" />
     <title>게시글 목록</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-        :root{
-            --bg:#0f172a; --card:#111827; --muted:#94a3b8; --text:#e5e7eb;
-            --line:#1f2937; --brand:#6366f1; --brand-2:#22c55e; --danger:#ef4444;
-        }
-        *{box-sizing:border-box}
-        body{margin:0;background:linear-gradient(180deg,#0b1022,#121625);color:var(--text);font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Apple SD Gothic Neo,Noto Sans KR,Arial}
-        .container{max-width:1100px;margin:48px auto;padding:0 20px}
-        .page-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-        .title{font-size:28px;font-weight:800;letter-spacing:.2px}
-        .sub{color:var(--muted);font-size:14px}
-        .card{background:linear-gradient(180deg,#0c1224 0%,#0c162a 100%);border:1px solid #1d2542;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,.35)}
-        .card-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line)}
-        .table-wrap{overflow:auto}
-        table{width:100%;border-collapse:collapse}
-        th,td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
-        th{color:#a5b4fc;font-weight:700;background:rgba(99,102,241,.06)}
-        tr:hover td{background:rgba(148,163,184,.06)}
-        .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid #2c3b72;background:linear-gradient(180deg,#1a2570,#172050);padding:10px 14px;border-radius:12px;color:#c7d2fe;text-decoration:none;font-weight:700;letter-spacing:.2px;cursor:pointer}
-        .btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.35)}
-        .btn.secondary{background:linear-gradient(180deg,#1d283a,#182232);border-color:#2b3548;color:#e5e7eb}
-        .badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;font-size:12px;border:1px solid #334155;background:linear-gradient(180deg,#0b1224,#0b1a2e);color:#cbd5e1}
-        .badge .dot{width:8px;height:8px;border-radius:50%;background:var(--brand-2)}
-        .row-actions{display:flex;gap:8px;justify-content:center}
-        .title-link{color:var(--text);text-decoration:none}
-        .title-link:hover{color:#bfdbfe;text-decoration:underline}
-    </style>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
+
+<div th:replace="fragments/header :: headerFragment"></div>
+
 <div class="container">
     <div class="page-head">
         <div>
@@ -55,7 +32,7 @@
             </span>
         </div>
         <div class="table-wrap">
-            <table>
+            <table class="table">
                 <thead>
                 <tr>
                     <th>ID</th>

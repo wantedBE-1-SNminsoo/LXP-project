@@ -1,0 +1,433 @@
+/* General Body and Typography */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Login gradient as global background */
+    color: #333;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0.8em;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+h1 { font-size: 2.2em; }
+h2 { font-size: 1.8em; }
+h3 { font-size: 1.5em; }
+
+a {
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+/* Main Layout Container */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 25px;
+    background: #ffffff; /* Set container background to white */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Header and Navigation */
+.header {
+    background: #2c3e50;
+    color: white;
+    padding: 15px 0;
+    margin-bottom: 25px;
+    border-radius: 8px 8px 0 0;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    box-shadow: none;
+    margin: 0 auto;
+    padding: 0 25px;
+}
+
+.header .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between; /* Distribute content between left and right */
+    width: 100%;
+    align-items: center;
+}
+
+.nav-left a, .nav-right a {
+    color: white;
+    margin-left: 20px;
+    font-weight: 500;
+}
+
+.nav-left a:first-child, .nav-right a:first-child {
+    margin-left: 0; /* No left margin for the first item in each group */
+}
+
+.nav a:hover {
+    text-decoration: underline;
+}
+
+
+/* Forms */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background-color: #3498db;
+}
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+}
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+}
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+/* Tables */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table th, .table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.table th {
+    background-color: #f2f2f2;
+    font-weight: 600;
+}
+
+.table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Alerts and Messages */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    text-align: center;
+}
+.alert-success {
+    color: #27ae60;
+    background: #d4edda;
+}
+.alert-error {
+    color: #e74c3c;
+    background: #f8d7da;
+}
+
+/* Login Page Specific Styles */
+.login-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    padding: 40px;
+    width: 100%;
+    max-width: 420px;
+    margin: 60px auto;
+}
+
+/* Removed .login-body as global body now has the gradient */
+
+/* Payment Page Specific Styles */
+.payment-container {
+    max-width: 480px;
+    width: 100%;
+    background-color: #ffffff;
+    margin: 20px auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.payment-container h2 {
+    text-align: center;
+    color: #333333;
+    margin-bottom: 25px;
+    font-weight: 700;
+}
+.payment-container h3 {
+    color: #555555;
+    border-left: 4px solid #4a90e2;
+    padding-left: 10px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+.item-list {
+    background-color: #fcfcfc;
+    border-radius: 8px;
+    padding: 0 5px;
+    border: none;
+}
+.item-list div {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 0.95em;
+    color: #444444;
+}
+.receipt-divider {
+    border-top: 2px dashed #bbbbbb;
+    margin: 15px 0;
+}
+.total-amount {
+    background-color: #e6f0fa;
+    font-weight: 700;
+    padding: 15px;
+    margin-top: 0;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #d0e0f0;
+}
+.total-amount span {
+    font-size: 1.2em;
+    color: #d93025;
+}
+.payment-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding: 5px 0;
+}
+.payment-options label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    border: 2px solid #dddddd;
+    border-radius: 12px;
+    padding: 15px 10px;
+    min-height: 80px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    line-height: 1.4;
+    font-size: 0.9em;
+    color: #555555;
+    position: relative;
+}
+.payment-options input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.payment-options label:has(input[type="radio"]:checked) {
+    border-color: #1a73e8;
+    background-color: #e6f0fa;
+}
+.payment-options input[type="radio"]:checked + .payment-method-icon {
+    color: #1a73e8;
+}
+.payment-options label:hover {
+    border-color: #a4c8f5;
+    background-color: #f0f7ff;
+}
+.payment-method-icon {
+    font-size: 1.8em;
+    margin-bottom: 5px;
+}
+.btn-pay {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #1a73e8;
+    color: white;
+    font-size: 1.1em;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: background-color 0.2s;
+}
+.btn-pay:hover {
+    background-color: #155bb9;
+}
+
+/* Enrollment Card Styles */
+.enrollment-card {
+    border: 1px solid #eee;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.enrollment-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.enrollment-card .course-title {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #2c3e50; /* Match general heading color */
+}
+
+.enrollment-card .progress-text {
+    font-size: 0.9em;
+    color: #555;
+    margin: 5px 0;
+}
+
+.enrollment-card .progress-bar {
+    background: #e0e0e0;
+    border-radius: 5px;
+    height: 10px;
+    overflow: hidden;
+}
+
+.enrollment-card .progress-fill {
+    background: #667eea; /* A vibrant color for progress, matching the body gradient start color */
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.5s ease-in-out;
+}
+
+.enrollment-card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Community Pages (Dark Theme) */
+.community-body { /* Removed background and color, global body will apply */
+    color: #e5e7eb; /* Keep text color for dark theme elements */
+}
+.community-body .container {
+    background: none;
+    box-shadow: none;
+    max-width: 1100px;
+}
+.community-body .header {
+    background: transparent;
+    margin-bottom: 0;
+}
+.community-body .card {
+    background: linear-gradient(180deg,#0c1224 0%,#0c162a 100%);
+    border: 1px solid #1d2542;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.35);
+    padding: 22px;
+}
+.community-body .page-head {
+    display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px
+}
+.community-body .title {
+    font-size:28px;font-weight:800;letter-spacing:.2px; color: #fff;
+}
+.community-body .sub {
+    color:#94a3b8;font-size:14px
+}
+.community-body .card-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #1f2937}
+.community-body .table-wrap{overflow:auto}
+.community-body .table { color: #e5e7eb; }
+.community-body .table th, .community-body .table td{border-bottom:1px solid #1f2937;text-align:center;white-space:nowrap}
+.community-body .table th{color:#a5b4fc;font-weight:700;background:rgba(99,102,241,.06)}
+.community-body .table tr:hover td{background:rgba(148,163,184,.06)}
+.community-body .btn{border:1px solid #2c3b72;background:linear-gradient(180deg,#1a2570,#172050);padding:10px 14px;border-radius:12px;color:#c7d2fe;font-weight:700;letter-spacing:.2px;}
+.community-body .btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.35)}
+.community-body .btn.secondary{background:linear-gradient(180deg,#1d283a,#182232);border-color:#2b3548;color:#e5e7eb}
+.community-body .btn.danger{background:linear-gradient(180deg,#7a1720,#4d0f15);border-color:#7a1f2a;color:#fecaca}
+.community-body .badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;font-size:12px;border:1px solid #334155;background:linear-gradient(180deg,#0b1224,#0b1a2e);color:#cbd5e1}
+.community-body .badge .dot{width:8px;height:8px;border-radius:50%;background:#22c55e}
+.community-body .row-actions{display:flex;gap:8px;justify-content:center}
+.community-body label { color: #e5e7eb; }
+.community-body input[type="text"], .community-body textarea, .community-body select {
+    border:1px solid #27335a;border-radius:12px;background:#0c1224;color:#e5e7eb
+}
+.community-body .error{font-size:12px;color:#fca5a5}

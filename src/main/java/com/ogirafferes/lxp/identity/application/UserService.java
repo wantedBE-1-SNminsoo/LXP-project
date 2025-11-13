@@ -35,6 +35,10 @@ public class UserService {
 		return userRepository.save(user);
 	}
 
-
+    @Transactional
+    public User getUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
 }
 

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>장바구니 🛒</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <style>
+        /* Custom styles for cart page, complementing main.css */
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #eee;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            background-color: #fff; /* Ensure white background */
+        }
+
+        .cart-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .item-details {
+            margin-left: 0;
+            text-align: left;
+        }
+
+        .item-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .item-instructor {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .item-price-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .item-price {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #d93025; /* Danger color for price */
+            margin-bottom: 10px;
+        }
+
+        .remove-form {
+            display: inline-block;
+        }
+
+        .total-summary-panel {
+            border: 1px solid #eee;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9; /* Light background for summary */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+            padding-top: 15px;
+            margin-top: 15px;
+            border-top: 2px solid #eee;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+
+        .empty-cart p {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="fragments/header :: headerFragment"></div>
+
+<div class="container">
+
+    <h1>장바구니</h1>
+
+    <div th:if="${#lists.isEmpty(cartItemList)}" class="empty-cart">
+        <p>장바구니에 담긴 상품이 없습니다. 😥</p>
+        <p>지금 인기 강의를 찾아보세요!</p>
+        <a href="/" class="btn btn-primary">홈으로 돌아가기</a>
+    </div>
+
+    <div th:unless="${#lists.isEmpty(cartItemList)}">
+        <div class="cart-item" th:each="item, status : ${cartItemList}">
+            <div class="item-info">
+                <div class="item-details">
+                    <div class="item-title" th:text="${item.courseTitle}">클린 코드 작성법 마스터 클래스</div>
+                    <div class="item-instructor" th:text="${item.courseInstructor}">김인프런 강사</div>
+                </div>
+            </div>
+
+            <div class="item-price-actions">
+                <div class="item-price" th:with="price=${item.coursePrice}">
+                    <span th:text="${#numbers.formatDecimal(price, 0, 'COMMA', 0, 'POINT')}">35,000</span>원
+                </div>
+
+                <form class="remove-form" th:action="@{/cart/delete/{cartItemId}(cartItemId=${item.cartItemId})}" method="post">
+                    <input type="hidden" name="_method" value="delete" />
+                    <button type="submit" class="btn btn-danger">
+                        삭제
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <th:block th:if="${cartItemList != null and not #lists.isEmpty(cartItemList)}"
+                  th:with="totalAmount=${#aggregates.sum(cartItemList.![coursePrice])}">
+
+            <div class="total-summary-panel">
+                <div class="summary-total">
+                    <span>총 합계</span>
+                    <span th:text="${#numbers.formatDecimal(totalAmount, 0, 'COMMA', 0, 'POINT')} + '원'">100,000원</span>
+                </div>
+
+                <a th:href="@{/sales/payment/request}" class="btn btn-primary" style="margin-top: 20px; display: block; width: 100%;">
+                    총 <span th:text="${#numbers.formatDecimal(totalAmount, 0, 'COMMA', 0, 'POINT')}">100,000</span>원 결제하기
+                </a>
+            </div>
+
+        </th:block>
+
+        <th:block th:if="${cartItemList == null or #lists.isEmpty(cartItemList)}">
+        </th:block>
+
+    </div>
+
+</div>
+
+</body>
+</html>
