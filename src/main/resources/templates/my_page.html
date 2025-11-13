@@ -39,8 +39,19 @@
 
     <hr style="margin: 30px 0;">
 
-    <h2>내 게시글 (준비중)</h2>
-    <!-- 향후 추가 예정 -->
+    <h2>내 게시글</h2>
+    <div th:if="${myPosts.isEmpty()}">
+        <p>작성한 게시글이 없습니다.</p>
+        <a href="/community/post/new" class="btn btn-primary">새 게시글 작성하기</a>
+    </div>
+
+    <div th:each="post : ${myPosts}" class="enrollment-card" style="margin-bottom: 15px;">
+        <a th:href="@{/community/post/{postId}(postId=${post.id})}" class="enrollment-card-link">
+            <div class="course-title" th:text="${post.title}">게시글 제목</div>
+            <div class="progress-text" th:text="${post.content}">게시글 내용</div>
+            <div class="progress-text">작성일: <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span></div>
+        </a>
+    </div>
 
     <hr style="margin: 30px 0;">
 

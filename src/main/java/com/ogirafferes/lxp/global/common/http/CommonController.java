@@ -2,7 +2,11 @@ package com.ogirafferes.lxp.global.common.http;
 
 import com.ogirafferes.lxp.catalog.application.CourseCatalogService;
 import com.ogirafferes.lxp.catalog.domain.model.Course;
+import com.ogirafferes.lxp.community.application.CommunityService;
+import com.ogirafferes.lxp.community.domain.model.Post;
 import com.ogirafferes.lxp.identity.application.adapter.CustomUserPrincipal;
+import com.ogirafferes.lxp.identity.domain.model.User;
+import com.ogirafferes.lxp.identity.domain.repository.UserRepository;
 import com.ogirafferes.lxp.learning.application.LearningService;
 import com.ogirafferes.lxp.learning.domain.model.Enrollment;
 import com.ogirafferes.lxp.learning.presentation.dto.EnrollmentWithProgressResponse;
@@ -23,6 +27,8 @@ public class CommonController {
 
     private final LearningService learningService;
     private final CourseCatalogService courseCatalogService;
+    private final CommunityService communityService; // Add CommunityService
+    private final UserRepository userRepository; // Add UserRepository
 
     @GetMapping("/my_page") // enrollment들을 나열하고, 해당 각각의 enrollment로 course detail 페이지로 이동하는 링크 제공
     public String listUserEnrollments(Model model,
@@ -38,8 +44,11 @@ public class CommonController {
         List<Course> myCourses = courseCatalogService.getCoursesByInstructor(userId);
         model.addAttribute("createdCourses", myCourses);
 
+        // 내가 쓴 게시글 목록
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        List<Post> myPosts = communityService.findPostsByAuthor(user);
+        model.addAttribute("myPosts", myPosts);
 
-        // users my Posts list
         return "my_page";
     }
 }

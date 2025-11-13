@@ -7,6 +7,8 @@ import com.ogirafferes.lxp.community.domain.model.PostComment;
 import com.ogirafferes.lxp.community.domain.repository.PostTypeRepository;
 import com.ogirafferes.lxp.community.presentation.dto.CreatePostRequest;
 import com.ogirafferes.lxp.identity.application.adapter.CustomUserPrincipal;
+import com.ogirafferes.lxp.identity.domain.model.User;
+import com.ogirafferes.lxp.identity.domain.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -27,11 +29,13 @@ public class PostController {
     private final CommunityService communityService;
     private final PostTypeRepository postTypeRepository;
     private final CommentService commentService;
+    private final UserRepository userRepository;
 
-    public PostController(CommunityService communityService, PostTypeRepository postTypeRepository, CommentService commentService) {
+    public PostController(CommunityService communityService, PostTypeRepository postTypeRepository, CommentService commentService, UserRepository userRepository) {
         this.communityService = communityService;
         this.postTypeRepository = postTypeRepository;
         this.commentService = commentService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping
@@ -39,6 +43,15 @@ public class PostController {
         List<Post> posts = communityService.findAll();
         model.addAttribute("posts", posts);
         return "community/post";
+    }
+
+    @GetMapping("/my-posts")
+    public String findMyPosts(Model model, @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal) {
+        Long userId = customUserPrincipal.getUserId();
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found")); // Consider a more specific exception
+        List<Post> myPosts = communityService.findPostsByAuthor(user);
+        model.addAttribute("myPosts", myPosts);
+        return "my_page";
     }
 
     @GetMapping("/new")
