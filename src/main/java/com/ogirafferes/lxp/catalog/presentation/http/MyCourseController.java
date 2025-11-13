@@ -78,7 +78,7 @@ public class MyCourseController {
         if (!course.getInstructor().getId().equals(instructorId)) {
             throw new IllegalArgumentException("본인의 강좌만 관리할 수 있습니다.");
         }
-        if (course.getCourseStatus() != CourseStatus.ACTIVE) {
+        if (course.getCourseStatus() != CourseStatus.PUBLISHED) {
             courseDomainService.activateCourse(course);
         } else  {
             courseDomainService.deactivateCourse(course);
