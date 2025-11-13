@@ -36,7 +36,7 @@ public class CommonController {
 
         // 내가 개설한 강좌 목록
         List<Course> myCourses = courseCatalogService.getCoursesByInstructor(userId);
-        model.addAttribute("myCourses", myCourses);
+        model.addAttribute("createdCourses", myCourses);
 
 
         // users my Posts list

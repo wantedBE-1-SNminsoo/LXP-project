@@ -41,7 +41,9 @@
                 <tbody>
                 <tr th:each="post : ${posts}">
                     <td th:text="${post.id}">1</td>
-                    <td th:text="${post.title}">제목</td>
+                    <td>
+                        <a th:href="@{/community/post/{id}(id=${post.id})}" th:text="${post.title}">제목</a>
+                    </td>
                     <td th:text="${post.author != null ? post.author.nickname : 'N/A'}">닉네임</td>
                     <td>
                         <span class="badge" th:text="${post.postType != null ? post.postType.name : 'N/A'}">FREE</span>

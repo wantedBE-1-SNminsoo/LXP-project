@@ -7,17 +7,19 @@
 <body>
 <header class="header" th:fragment="headerFragment">
     <div class="container">
-        <a th:href="@{/}" class="logo">LXP</a>
+        <a th:href="@{/}" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-graduation-cap"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.084a1 1 0 0 0 0 1.838l8.57 3.838a2 2 0 0 0 1.66 0l8.57-3.838Z"/><path d="M22 12v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6"/><path d="M12 22v-8"/></svg>
+            EDU민수
+        </a>
         <nav class="nav">
             <div class="nav-left">
-                <a th:href="@{/}">Home</a>
-                <a th:href="@{/courses}">Courses</a>
+                <a th:href="@{/courses}">강좌 목록</a>
                 <a th:href="@{/community/post}">Community</a>
             </div>
             <div class="nav-right">
                 <a th:href="@{/my_page}">My Page</a>
                 <a th:href="@{/cart/list}">🛒 장바구니</a>
-                <form th:action="@{/auth/logout}" method="post" style="display: inline-block;">
+                <form th:action="@{/auth/logout}" method="post" style="display: inline-block; margin-left: 20px;">
                     <button type="submit" class="btn btn-secondary">Logout</button>
                 </form>
             </div>
