@@ -81,4 +81,9 @@ public class CommunityService {
         postRepository.delete(post);
     }
 
+    @Transactional
+    public List<Post> findPostsByAuthor(User author){
+        return postRepository.findAllByAuthor(author);
+    }
+
 }
