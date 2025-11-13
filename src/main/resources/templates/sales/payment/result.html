@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>✅ 결제 결과 확인</title>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* [핵심 수정: 0. Box-Sizing 설정] */
+        /* 모든 요소에 box-sizing: border-box를 적용하여 padding과 border가 width/height에 포함되도록 합니다. */
+        /* 이로 인해 width: 100%를 가진 요소가 부모 컨테이너를 벗어나는 문제가 해결됩니다. */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* 1. 전체 기본 스타일 - 요청 페이지와 동일하게 설정 */
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            /* 💡 login.html의 그라데이션 배경을 적용 */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; /* 화면 전체를 채우도록 설정 */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center; /* 💡 컨테이너를 중앙에 배치 */
+        }
+
+        /* 2. 결제 결과 컨테이너 - 영수증처럼 보이도록 스타일링 */
+        .result-container {
+            max-width: 480px;
+            width: 100%;
+            background-color: #ffffff;
+            margin: auto;
+            padding: 35px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); /* 💡 로그인 페이지와 동일한 그림자 적용 */
+            text-align: center;
+        }
+
+        /* 3. 상태 표시 섹션 (성공/실패) */
+        .status-header {
+            padding-bottom: 25px;
+            margin-bottom: 25px;
+            border-bottom: 2px dashed #dddddd;
+        }
+
+        /* 3-1. 성공 상태 스타일 */
+        .success .status-icon {
+            color: #00a037;
+            font-size: 3.5em;
+        }
+
+        .success h2 {
+            color: #006022;
+            margin-top: 5px;
+            font-weight: 700;
+        }
+
+        /* 3-2. 실패 상태 스타일 */
+        .failure .status-icon {
+            color: #d93025;
+            font-size: 3.5em;
+        }
+
+        .failure h2 {
+            color: #8f1f17;
+            margin-top: 5px;
+            font-weight: 700;
+        }
+
+        .failure p {
+            color: #444;
+            margin-top: 10px;
+            font-size: 1em;
+        }
+
+        /* 4. 결제 상세 정보 스타일 (영수증 항목처럼) */
+        .detail-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            font-size: 0.95em;
+            color: #555555;
+        }
+
+        .detail-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dotted #eeeeee;
+        }
+
+        .detail-list li:last-child {
+            border-bottom: none;
+        }
+
+        .detail-list .label {
+            font-weight: 400;
+            color: #777777;
+        }
+
+        .detail-list .value {
+            font-weight: 500;
+            color: #333333;
+        }
+
+
+        /* 5. 최종 결제 금액 스타일 (성공 시 강조) */
+        .total-amount-display {
+            background-color: #e6f0fa;
+            font-weight: 700;
+            padding: 18px 20px;
+            margin-top: 30px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #d0e0f0;
+        }
+
+        .total-amount-display span {
+            font-size: 1.3em;
+            color: #1a73e8;
+        }
+
+        .total-amount-display .label {
+            font-weight: 700;
+            color: #333333;
+        }
+
+
+        /* 6. 하단 버튼 스타일 */
+        /* [수정: margin-top을 btn-action에만 적용] */
+        .btn-action {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #1a73e8;
+            color: white;
+            font-size: 1.1em;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 30px; /* 첫 번째 버튼의 상단 마진 */
+            transition: background-color 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-action:hover {
+            background-color: #155bb9;
+        }
+
+        /* [수정: 두 번째 버튼의 상단 마진을 줄임] */
+        .btn-secondary {
+            background-color: #6c757d;
+            margin-top: 10px; /* 두 번째 버튼은 간격을 좁게 설정 */
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+
+<div th:class="${#strings.equals(paymentResult.paymentStatus, '결제 성공')} ? 'result-container success' : 'result-container failure'">
+
+    <div class="status-header">
+        <th:block th:if="${#strings.equals(paymentResult.paymentStatus, '결제 성공')}">
+            <div class="status-icon">🎉</div> <h2>결제가 성공적으로 완료되었습니다!</h2>
+        </th:block>
+        <th:block th:if="${#strings.equals(paymentResult.paymentStatus, '결제 실패')}">
+            <div class="status-icon">😥</div> <h2>결제에 실패했습니다.</h2>
+<!--            <p th:text="${paymentResult.failReason != null ? paymentResult.failReason : '잠시 후 다시 시도해 주세요.'}"></p>-->
+        </th:block>
+    </div>
+
+    <ul class="detail-list">
+        <li>
+            <span class="label">주문 번호</span>
+            <span class="value" th:text="${paymentResult.orderNumber}">ORD-2511111234567890</span>
+        </li>
+        <li>
+            <span class="label">결제 상태</span>
+            <span class="value" th:text="${#strings.equals(paymentResult.paymentStatus, '결제 성공') ? '결제 완료' : '결제 실패'}">결제 완료</span>
+        </li>
+        <th:block th:if="${#strings.equals(paymentResult.paymentStatus, '결제 성공')}">
+            <li>
+                <span class="label">결제 수단</span>
+                <span class="value" th:text="${paymentResult.paymentStatus}">민수 페이</span>
+            </li>
+            <li th:if="${paymentResult.transactionId}">
+                <span class="label">거래 ID</span>
+                <span class="value" th:text="${paymentResult.transactionId}">TX_1234567890</span>
+            </li>
+        </th:block>
+        <li>
+            <span class="label">결제 일시</span>
+            <span class="value" th:text="${paymentResult.paidAt != null ? #temporals.format(paymentResult.paidAt, 'yyyy-MM-dd HH:mm:ss') : 'N/A'}">2025-11-11 18:00:00</span>
+        </li>
+    </ul>
+
+    <th:block th:if="${#strings.equals(paymentResult.paymentStatus, '결제 성공')}">
+        <div class="total-amount-display">
+            <span class="label">총 결제 금액</span>
+            <span th:text="${#numbers.formatDecimal(paymentResult.totalAmount, 0, 'COMMA', 0, 'POINT')} + '원'">35,000원</span>
+        </div>
+    </th:block>
+
+    <a th:href="@{/order/{orderId}(orderId=${paymentResult.orderNumber})}" class="btn-action">주문 상세 내역 확인</a>
+    <a href="/" class="btn-action btn-secondary">홈으로 돌아가기</a>
+</div>
+
+</body>
+</html>

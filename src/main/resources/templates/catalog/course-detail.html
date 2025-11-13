@@ -46,10 +46,9 @@
 
     <!-- 수강 중이 아닌 경우 (isEnrolled가 null이거나 false인 경우) -->
     <form th:if="${isEnrolled == null or !isEnrolled}"
-          th:action="@{/cart/add}"
+          th:action="@{/cart/add/{courseId}(courseId=${course.id})}"
           method="post"
           style="display: inline;">
-        <input type="hidden" name="courseId" th:value="${course.id}" />
         <button type="submit" class="btn-success">🛒 장바구니 담기</button>
     </form>
 </div>
@@ -77,5 +76,16 @@
     <a th:href="@{/courses/{id}/edit(id=${course.id})}">수정</a>
     <a href="/courses">목록으로</a>
 </div>
+
+<script th:inline="javascript">
+    // Flash Attribute로 전달된 'errorMessage' 변수를 Thymeleaf가 JavaScript 변수로 변환
+    const errorMessage = /*[[${errorMessage}]]*/ 'default message';
+
+    // 메시지가 null이거나 비어있지 않은지 확인합니다.
+    // Flash Attribute는 사용 후 사라지므로, 리다이렉트 후 단 한 번만 메시지가 담겨 있습니다.
+    if (errorMessage && errorMessage !== 'default message') {
+        alert(errorMessage);
+    }
+</script>
 </body>
 </html>

@@ -4,6 +4,7 @@ import com.ogirafferes.lxp.sales.domain.model.Payment;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -12,21 +13,23 @@ import java.time.LocalDateTime;
 @Getter
 public class ResponsePayment {
 
-    private String orderNumber;
-    private String paymentMethod;
-    private String paymentProvider;
+    private final String orderNumber;
+    private final String paymentMethod;
+    private final String paymentProvider;
+    private final BigDecimal totalAmount;
 
-    private String transactionId;
+    private final String transactionId;
 
-    private String paymentStatus;
+    private final String paymentStatus;
 
-    private LocalDateTime paidAt;
+    private final LocalDateTime paidAt;
 
     @Builder
-    public ResponsePayment(String orderNumber, String paymentMethod, String paymentProvider, String transactionId, String paymentStatus, LocalDateTime paidAt) {
+    public ResponsePayment(String orderNumber, String paymentMethod, String paymentProvider, BigDecimal totalAmount, String transactionId, String paymentStatus, LocalDateTime paidAt) {
         this.orderNumber = orderNumber;
         this.paymentMethod = paymentMethod;
         this.paymentProvider = paymentProvider;
+        this.totalAmount = totalAmount;
         this.transactionId = transactionId;
         this.paymentStatus = paymentStatus;
         this.paidAt = paidAt;
@@ -37,8 +40,9 @@ public class ResponsePayment {
                 .orderNumber(payment.getOrderNumber())
                 .paymentMethod(payment.getPaymentMethod().toString())
                 .paymentProvider(payment.getPaymentProvider())
+                .totalAmount(payment.getTotalAmount().getAmount())
                 .transactionId(payment.getTransactionId())
-                .paymentStatus(payment.getPaymentStatus().toString())
+                .paymentStatus(payment.getPaymentStatus().getDescription())
                 .paidAt(payment.getPaidAt())
                 .build();
     }

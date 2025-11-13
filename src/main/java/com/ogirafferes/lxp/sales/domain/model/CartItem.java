@@ -31,9 +31,15 @@ public class CartItem {
     private Course course;
 
     @Builder
-    public CartItem(User user, Course course) {
+    private CartItem(User user, Course course) {
         this.user = user;
         this.course = course;
     }
 
+    public static CartItem from(User user, Course course) {
+        return CartItem.builder()
+                .user(user)
+                .course(course)
+                .build();
+    }
 }
