@@ -24,8 +24,10 @@ public class LearningController {
     private final LearningService learningService;
 
     @PostMapping("/{enrollmentId}/completeLecture/{lectureId}") // 해당 요청의 자연스러운 위치는 lecture 에서 complete button을 통해 redirect?
-    public String completeLecture(@PathVariable Long enrollmentId, @PathVariable Long lectureId, @AuthenticationPrincipal CustomUserPrincipal principal, Model model) {
-        long userId = principal.getUserId();
+    public String completeLecture(@PathVariable Long enrollmentId,
+                                  @PathVariable Long lectureId,
+                                  @AuthenticationPrincipal CustomUserPrincipal userPrincipal, Model model) {
+        Long userId = userPrincipal.getUserId();
         try {
             Long courseId = learningService.completeLecture(enrollmentId, lectureId, userId);
             return "redirect:/courses/" + courseId;
