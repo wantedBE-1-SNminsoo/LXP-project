@@ -5,47 +5,20 @@
     <title>LXP - Main</title>
     <style>
         body { margin: 0; font-family: Arial, Helvetica, sans-serif; }
-        .navbar {
-            background-color: #2b2b2b;
-            padding: 12px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .navbar-left { display: flex; gap: 18px; }
-        .navbar-right { display: flex; gap: 12px; align-items: center; }
+        .navbar { background-color: #2b2b2b; padding: 12px 24px; display: flex; gap: 18px; }
         .navbar a { color: white; text-decoration: none; font-size: 16px; }
         .navbar a:hover { text-decoration: underline; }
-        .cart-btn {
-            background-color: #ff6b6b;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .cart-btn:hover { background-color: #ff5252; text-decoration: none; }
         .container { margin: 40px auto; width: 80%; }
         .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        .course-card { border: 1px solid #aaa; padding: 20px; border-radius: 6px; min-height: 200px; }
+        .course-card { border: 1px solid #aaa; padding: 20px; border-radius: 6px; height: 180px; }
         .course-card h3 { margin-top: 0; font-size: 18px; }
         .course-card a { display: inline-block; margin-top: 8px; color: #0066ff; text-decoration: none; }
         .course-card a:hover { text-decoration: underline; }
-        .btn-add-cart {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .btn-add-cart:hover { background-color: #218838; }
     </style>
 </head>
 <body>
 
-<!-- 상단 메뉴바 -->
+<!-- ✅ 상단 메뉴바 (Thymeleaf 링크로 수정) -->
 <nav class="navbar">
     <div class="navbar-left">
         <a th:href="@{/}">Home</a>
@@ -56,29 +29,25 @@
     <div class="navbar-right">
         <a th:href="@{/my_page}">My Page</a>
         <a th:href="@{/cart}" class="cart-btn">🛒 장바구니</a>
-        <a th:href="@{/auth/logout}">Logout</a>
+      <form th:action="@{/auth/logout}" method="post" style="display: inline;">
+        <button type="submit" style="background:none; border:none; color:white; text-decoration:none; font-size:16px; font-family: Arial, Helvetica, sans-serif; cursor:pointer; padding:0;">Logout</button>
+    </form>
+
     </div>
 </nav>
 
-<!-- 강좌 목록 영역 -->
+<!-- ✅ 강좌 목록 영역 (Thymeleaf 반복문 적용) -->
 <div class="container">
-    <h1>활성 강좌 목록</h1>
     <div class="course-grid">
+
+        <!-- 컨트롤러에서 전달받은 courses를 반복하여 표시 -->
         <div class="course-card" th:each="course : ${courses}">
             <h3 th:text="${course.title}">Course Title</h3>
             <p th:text="${course.description}">Course description...</p>
-            <p><strong>가격:</strong> <span th:text="${#numbers.formatDecimal(course.price, 0, 'COMMA', 0, 'POINT')}">0</span>원</p>
-            <div>
-                <a th:href="@{/courses/{id}(id=${course.id})}">자세히 보기</a>
-
-                <!-- 장바구니 버튼 -->
-                <form th:action="@{/cart/add}" method="post" style="display: inline;">
-                    <input type="hidden" name="courseId" th:value="${course.id}" />
-                    <button type="submit" class="btn-add-cart">🛒 장바구니 담기</button>
-                </form>
-            </div>
+            <a th:href="@{/courses/{id}(id=${course.id})}">자세히 보기</a>
         </div>
 
+        <!-- 만약 강좌가 없다면 보여줄 메시지 (선택 사항) -->
         <div th:if="${#lists.isEmpty(courses)}">
             <p>현재 수강 가능한 강좌가 없습니다.</p>
         </div>
