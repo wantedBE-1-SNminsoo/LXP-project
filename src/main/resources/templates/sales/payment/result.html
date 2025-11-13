@@ -15,11 +15,14 @@
         /* 1. 전체 기본 스타일 - 요청 페이지와 동일하게 설정 */
         body {
             font-family: 'Noto Sans KR', Arial, sans-serif;
-            background-color: #f4f7f9;
+            /* 💡 login.html의 그라데이션 배경을 적용 */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; /* 화면 전체를 채우도록 설정 */
             margin: 0;
             padding: 20px;
             display: flex;
             justify-content: center;
+            align-items: center; /* 💡 컨테이너를 중앙에 배치 */
         }
 
         /* 2. 결제 결과 컨테이너 - 영수증처럼 보이도록 스타일링 */
@@ -28,10 +31,9 @@
             width: 100%;
             background-color: #ffffff;
             margin: auto;
-            /* 컨테이너의 좌우 패딩을 유지하여 내부 요소들이 삐져나오지 않도록 합니다. */
             padding: 35px 30px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); /* 💡 로그인 페이지와 동일한 그림자 적용 */
             text-align: center;
         }
 
