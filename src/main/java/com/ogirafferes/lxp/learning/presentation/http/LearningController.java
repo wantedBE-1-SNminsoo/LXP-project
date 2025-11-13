@@ -1,9 +1,11 @@
 package com.ogirafferes.lxp.learning.presentation.http;
 
+import com.ogirafferes.lxp.identity.application.adapter.CustomUserPrincipal;
 import com.ogirafferes.lxp.learning.application.LearningService;
 import com.ogirafferes.lxp.learning.domain.model.Enrollment;
 import com.ogirafferes.lxp.learning.presentation.dto.EnrollmentWithProgressResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +23,10 @@ public class LearningController {
     private final LearningService learningService;
 
     @PostMapping("/{enrollmentId}/completeLecture/{lectureId}") // 해당 요청의 자연스러운 위치는 lecture 에서 complete button을 통해 redirect?
-    public String completeLecture(@PathVariable Long enrollmentId, @PathVariable Long lectureId, Principal principal, Model model) {
-        Long userId = Long.parseLong(principal.getName());
+    public String completeLecture(@PathVariable Long enrollmentId,
+                                  @PathVariable Long lectureId,
+                                  @AuthenticationPrincipal CustomUserPrincipal userPrincipal, Model model) {
+        Long userId = userPrincipal.getUserId();
         try {
             Long courseId = learningService.completeLecture(enrollmentId, lectureId, userId);
             return "redirect:/courses/" + courseId;
