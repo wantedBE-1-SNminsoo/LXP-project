@@ -3,10 +3,14 @@ package com.ogirafferes.lxp.catalog.presentation.http;
 import com.ogirafferes.lxp.catalog.application.CourseCatalogService;
 import com.ogirafferes.lxp.catalog.application.LectureService;
 import com.ogirafferes.lxp.catalog.domain.model.Course;
+import com.ogirafferes.lxp.catalog.domain.model.CourseStatus;
 import com.ogirafferes.lxp.catalog.domain.model.Lecture;
+import com.ogirafferes.lxp.catalog.domain.service.CourseDomainService;
 import com.ogirafferes.lxp.catalog.presentation.dto.CourseCreateRequest;
 import com.ogirafferes.lxp.catalog.presentation.dto.LectureCreateRequest;
+import com.ogirafferes.lxp.identity.application.adapter.CustomUserPrincipal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +25,7 @@ public class MyCourseController {
 
     private final CourseCatalogService courseCatalogService;
     private final LectureService lectureService;
+    private final CourseDomainService courseDomainService;
 
     // 내가 개설한 강좌 목록
     @GetMapping
@@ -63,6 +68,22 @@ public class MyCourseController {
 
         model.addAttribute("course", course);
         return "catalog/my-course-detail";
+    }
+
+    @PostMapping("/{courseId}/change-status") // 해당 서비스 button으로 호출
+    public String changeCourseStatus(@PathVariable Long courseId,
+                                     @AuthenticationPrincipal CustomUserPrincipal userPrincipal) {
+        Course course = courseCatalogService.getCourseDetail(courseId);
+        Long instructorId = userPrincipal.getUserId();
+        if (!course.getInstructor().getId().equals(instructorId)) {
+            throw new IllegalArgumentException("본인의 강좌만 관리할 수 있습니다.");
+        }
+        if (course.getCourseStatus() != CourseStatus.ACTIVE) {
+            courseDomainService.activateCourse(course);
+        } else  {
+            courseDomainService.deactivateCourse(course);
+        }
+        return "redirect:/my/courses/" + courseId;
     }
 
     // 강의 추가 폼
