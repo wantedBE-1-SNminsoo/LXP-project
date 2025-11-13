@@ -19,15 +19,15 @@ public class CourseController {
     private final CourseCatalogService courseCatalogService;
 
     // 전체 강좌 목록 페이지
-    @GetMapping
-    public String list(Model model) {
-        List<Course> courses = courseCatalogService.getAllCourses();
-        model.addAttribute("courses", courses);
-        return "catalog/course-list";
-    }
+//    @GetMapping
+//    public String list(Model model) { // 해당 페이지는 admin 에 적합한 페이지
+//        List<Course> courses = courseCatalogService.getAllCourses();
+//        model.addAttribute("courses", courses);
+//        return "catalog/course-list";
+//    }
 
     // 활성 강좌 목록 페이지
-    @GetMapping("/active")
+    @GetMapping
     public String listActive(Model model) {
         List<Course> courses = courseCatalogService.getActiveCourses();
         model.addAttribute("courses", courses);
