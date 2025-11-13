@@ -1,7 +1,9 @@
 package com.ogirafferes.lxp.community.presentation.http;
 
+import com.ogirafferes.lxp.community.application.CommentService;
 import com.ogirafferes.lxp.community.application.CommunityService;
 import com.ogirafferes.lxp.community.domain.model.Post;
+import com.ogirafferes.lxp.community.domain.model.PostComment;
 import com.ogirafferes.lxp.community.domain.repository.PostTypeRepository;
 import com.ogirafferes.lxp.community.presentation.dto.CreatePostRequest;
 import com.ogirafferes.lxp.identity.application.adapter.CustomUserPrincipal;
@@ -24,10 +26,12 @@ public class PostController {
 
     private final CommunityService communityService;
     private final PostTypeRepository postTypeRepository;
+    private final CommentService commentService;
 
-    public PostController(CommunityService communityService, PostTypeRepository postTypeRepository) {
+    public PostController(CommunityService communityService, PostTypeRepository postTypeRepository, CommentService commentService) {
         this.communityService = communityService;
         this.postTypeRepository = postTypeRepository;
+        this.commentService = commentService;
     }
 
     @GetMapping
@@ -110,6 +114,21 @@ public class PostController {
 
         communityService.delete(id, userId);
         return "redirect:/community/post";
+    }
+
+    @GetMapping("/{id}")
+    public String details(@PathVariable Long id, Model model,
+                          @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal) {
+        Post post = communityService.findById(id);
+        Long loginUserId = customUserPrincipal != null ? customUserPrincipal.getUserId() : null;
+
+        List<PostComment> comments = commentService.getCommentsByPostId(id);
+
+        model.addAttribute("post", post);
+        model.addAttribute("loginUserId", loginUserId);
+        model.addAttribute("comments", comments);
+
+        return  "community/post-detail";
     }
 
 }
