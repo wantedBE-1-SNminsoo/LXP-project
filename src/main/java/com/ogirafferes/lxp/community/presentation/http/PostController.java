@@ -51,7 +51,7 @@ public class PostController {
         Long userId = customUserPrincipal.getUserId();
         Post post = communityService.findById(id);
 
-        if(!post.getAuthorId().equals(userId)){
+        if(!post.getAuthor().getId().equals(userId)){
             return "redirect:/community/post";
         }
 
