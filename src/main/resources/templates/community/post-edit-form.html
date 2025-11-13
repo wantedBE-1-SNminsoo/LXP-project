@@ -4,31 +4,12 @@
     <meta charset="UTF-8" />
     <title>게시글 수정</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-        :root{
-            --bg:#0f172a; --card:#111827; --muted:#94a3b8; --text:#e5e7eb;
-            --line:#1f2937; --brand:#6366f1;
-        }
-        *{box-sizing:border-box}
-        body{margin:0;background:linear-gradient(180deg,#0b1022,#121625);color:var(--text);font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Apple SD Gothic Neo,Noto Sans KR,Arial}
-        .container{max-width:820px;margin:48px auto;padding:0 20px}
-        .title{font-size:26px;font-weight:800;margin-bottom:12px}
-        .sub{color:var(--muted);margin-bottom:22px}
-        .card{background:linear-gradient(180deg,#0c1224 0%,#0c162a 100%);border:1px solid #1d2542;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,.35);padding:22px}
-        .row{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-        label{font-weight:700}
-        input[type="text"], textarea, select{
-            width:100%;padding:12px 14px;border:1px solid #27335a;border-radius:12px;background:#0c1224;color:var(--text)
-        }
-        textarea{min-height:220px;line-height:1.6}
-        .error{font-size:12px;color:#fca5a5}
-        .actions{display:flex;gap:10px;margin-top:18px}
-        .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid #2c3b72;background:linear-gradient(180deg,#1a2570,#172050);padding:10px 14px;border-radius:12px;color:#c7d2fe;text-decoration:none;font-weight:700;letter-spacing:.2px;cursor:pointer}
-        .btn.secondary{background:linear-gradient(180deg,#1d283a,#182232);border-color:#2b3548;color:#e5e7eb}
-        .btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.35)}
-    </style>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
+
+<div th:replace="fragments/header :: headerFragment"></div>
+
 <div class="container">
     <div class="title">게시글 수정</div>
     <div class="sub">내용을 수정한 뒤 저장하세요.</div>
@@ -38,19 +19,19 @@
         <form th:action="@{'/community/post/' + ${postId}}" th:object="${post}" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-            <div class="row">
+            <div class="form-group">
                 <label for="title">제목</label>
                 <input id="title" type="text" th:field="*{title}" required />
                 <span class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
             </div>
 
-            <div class="row">
+            <div class="form-group">
                 <label for="content">내용</label>
                 <textarea id="content" th:field="*{content}" required></textarea>
                 <span class="error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></span>
             </div>
 
-            <div class="row">
+            <div class="form-group">
                 <label for="postTypeId">게시글 유형</label>
                 <select id="postTypeId" th:field="*{postTypeId}" required>
                     <option value="" disabled>-- 선택 --</option>
