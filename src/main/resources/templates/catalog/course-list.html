@@ -2,34 +2,54 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>강좌 목록</title>
+    <style>
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .navbar { background-color: #2b2b2b; padding: 12px 24px; display: flex; gap: 18px; }
+        .navbar a { color: white; text-decoration: none; font-size: 16px; }
+        .navbar a:hover { text-decoration: underline; }
+        .container { margin: 40px auto; width: 80%; }
+        .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .course-card { background: white; border: 1px solid #aaa; border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,0.08); padding: 24px 20px; min-height: 180px; display: flex; flex-direction: column; }
+        .course-card h3 { margin: 0 0 10px 0; font-size: 20px; color: #333; }
+        .course-card p { color: #666; font-size: 15px; margin-bottom: 8px; flex-grow:1; }
+        .course-card .meta { font-size: 14px; color: #888; margin-bottom: 4px; }
+        .course-card a { margin-top: 8px; color: #667eea; text-decoration: none; font-weight: 600; align-self: flex-end; }
+        .course-card a:hover { text-decoration: underline; }
+        .actions { margin: 20px 0 40px 40px; display: flex; gap: 18px; }
+        h1 { color: #fafafa; text-align: center; margin-top: 35px; }
+    </style>
 </head>
 <body>
-<h1>전체 강좌 목록</h1>
-<a href="/courses/active">활성 강좌만 보기</a>
-<a href="/courses/new">새 강좌 등록</a>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>제목</th>
-        <th>가격</th>
-        <th>상태</th>
-        <th>상세보기</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="course : ${courses}">
-        <td th:text="${course.id}">1</td>
-        <td th:text="${course.title}">강좌 제목</td>
-        <td th:text="${course.price}">50000</td>
-        <td th:text="${course.courseStatus}">ACTIVE</td>
-        <td>
-            <a th:href="@{/courses/{id}(id=${course.id})}">상세보기</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<nav class="navbar">
+    <a th:href="@{/courses}">Courses</a>
+    <a th:href="@{/users/me}">My Page</a>
+    <a th:href="@{/auth/login}">Logout</a>
+    <a th:href="@{/community}">Community</a>
+    <a th:href="@{/}">Home</a>
+</nav>
+
+<h1>전체 강좌 목록</h1>
+<div class="actions">
+    <a th:href="@{/courses/active}" style="color:#fff; background:#667eea; border-radius:6px; padding:6px 16px; text-decoration:none;">활성 강좌만 보기</a>
+    <a th:href="@{/courses/new}" style="color:#fff; background:#76cdc9; border-radius:6px; padding:6px 16px; text-decoration:none;">새 강좌 등록</a>
+</div>
+
+<div class="container">
+    <div class="course-grid">
+        <div class="course-card" th:each="course : ${courses}">
+            <h3 th:text="${course.title}">강좌 제목</h3>
+            <p th:text="${course.description}">강좌 설명...</p>
+            <div class="meta">가격: <span th:text="${course.price}">0</span>원 · 상태: <span th:text="${course.courseStatus}">ACTIVE</span></div>
+            <a th:href="@{/courses/{id}(id=${course.id})}">자세히 보기</a>
+        </div>
+        <div th:if="${#lists.isEmpty(courses)}" style="grid-column: 1 / -1; text-align: center; color: #aaa;">
+            현재 등록된 강좌가 없습니다.
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
