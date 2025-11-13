@@ -40,7 +40,7 @@ public class SecurityConfig {
 				.permitAll()
 			)
 			.logout(logout -> logout
-				.logoutUrl("/login")
+				.logoutUrl("/auth/logout")
 				.logoutSuccessUrl("/auth/login")
 				.invalidateHttpSession(true)
 				.deleteCookies("JSESSIONID")
