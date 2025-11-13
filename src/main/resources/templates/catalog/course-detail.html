@@ -22,11 +22,13 @@
     </div>
 
     <div class="action-buttons" style="margin: 20px 0;">
-        <a th:if="${isEnrolled != null and isEnrolled}"
-           th:href="@{/learning/courses/{id}/lectures(id=${course.id})}"
-           class="btn btn-primary">
-            📚 수강하러 가기
-        </a>
+        <!--        enrollment progress bar-->
+        <div th:if="${isEnrolled != null and isEnrolled}" style="margin-bottom: 10px;">
+            <p><strong>수강 진행률:</strong> <span th:text="${enrollment.progressPercentage}">0</span>%</p>
+            <div class="progress" style="width: 100%; background-color: #e0e0e0; border-radius: 5px;">
+                <div class="progress-bar" th:style="'width: ' + ${enrollment.progressPercentage} + '%; background-color: #4caf50; height: 20px; border-radius: 5px;'"></div>
+            </div>
+        </div>
 
         <form th:if="${isEnrolled == null or !isEnrolled}"
               th:action="@{/cart/add/{courseId}(courseId=${course.id})}"
@@ -44,6 +46,7 @@
             <th>순서</th>
             <th>강의명</th>
             <th>URL</th>
+            <th th:if="${isEnrolled != null and isEnrolled}">수강</th>
         </tr>
         </thead>
         <tbody>
@@ -51,6 +54,26 @@
             <td th:text="${lecture.lectureOrder}">1</td>
             <td th:text="${lecture.title}">강의 제목</td>
             <td th:text="${lecture.contentUrl}">URL</td>
+            <!-- enrollment가 true라면, 해당 강의들에 대해 active button 생성 -->
+            <td th:if="${isEnrolled != null and isEnrolled}">
+                <!-- 완료되지 않은 경우: 수강하기 버튼 -->
+                <form th:if="${!completedLectureIds.contains(lecture.id)}"
+                      th:action="@{/enrollment/{enrollmentId}/completeLecture/{lectureId}(enrollmentId=${enrollment.id}, lectureId=${lecture.id})}"
+                      method="post"
+                      style="margin: 0;">
+                    <button type="submit" class="btn btn-primary">
+                        ▶ 수강하기
+                    </button>
+                </form>
+
+                <!-- 완료된 경우: 비활성화 버튼 -->
+                <button th:if="${completedLectureIds.contains(lecture.id)}"
+                        class="btn btn-secondary"
+                        disabled
+                        style="cursor: not-allowed; opacity: 0.6;">
+                    ✓ 수강 완료
+                </button>
+            </td>
         </tr>
         </tbody>
     </table>

@@ -3,13 +3,20 @@ package com.ogirafferes.lxp.catalog.presentation.http;
 import com.ogirafferes.lxp.catalog.application.CourseCatalogService;
 import com.ogirafferes.lxp.catalog.domain.model.Course;
 import com.ogirafferes.lxp.catalog.presentation.dto.CourseCreateRequest;
+import com.ogirafferes.lxp.identity.application.adapter.CustomUserPrincipal;
+import com.ogirafferes.lxp.learning.application.LearningService;
+import com.ogirafferes.lxp.learning.domain.model.Enrollment;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/courses")
@@ -17,6 +24,7 @@ import java.util.List;
 public class CourseController {
 
     private final CourseCatalogService courseCatalogService;
+    private final LearningService learningService;
 
     // 전체 강좌 목록 페이지
 //    @GetMapping
@@ -36,13 +44,31 @@ public class CourseController {
 
     // 강좌 상세 페이지 (강의 목록 포함)
     @GetMapping("/{courseId}")
-    public String detail(@PathVariable Long courseId, Model model) {
+    public String detail(@PathVariable Long courseId,
+                         @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal,
+                         Model model) {
         Course course = courseCatalogService.getCourseWithLectures(courseId);
         model.addAttribute("course", course);
+
+        Long userId = customUserPrincipal.getUserId();
 
         // 반드시 isEnrolled를 false로 설정 (null이 되지 않도록)
         boolean isEnrolled = false;
 
+        // 현재 사용자가 해당 강좌에 수강 중인지 여부 확인 로직 추가 필요
+        // 해당 강좌를 수강 중일 경우, isEnrolled를 true로 설정
+        // 해당 강좌의 각 lecture 에 대해 complete로 만드는 button 활성화 여부 결정
+        Optional<Enrollment> enrollment = learningService.getEnrollment(userId, courseId);
+        if (enrollment.isPresent()) {
+            isEnrolled = true;
+            Enrollment enroll = enrollment.get();
+            model.addAttribute("enrollment", enrollment.get());
+
+            Set<Long> completedLectureIds = enroll.getProgresses().stream()
+                    .map(progress -> progress.getLecture().getId())
+                    .collect(Collectors.toSet());
+            model.addAttribute("completedLectureIds", completedLectureIds);
+        }
         model.addAttribute("isEnrolled", isEnrolled);
 
         return "catalog/course-detail";
