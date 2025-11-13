@@ -13,7 +13,7 @@ public class CourseDomainService {
         if (course.getLectures().isEmpty()) {
             throw new IllegalStateException("강의가 없는 강좌는 활성화할 수 없습니다.");
         }
-        course.changeStatus(CourseStatus.ACTIVE);
+        course.changeStatus(CourseStatus.PUBLISHED);
     }
 
     // 강좌 비활성화 정책
