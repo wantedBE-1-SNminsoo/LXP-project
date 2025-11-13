@@ -9,7 +9,7 @@ import com.ogirafferes.lxp.identity.domain.repository.UserRepository;
 import com.ogirafferes.lxp.learning.domain.model.Enrollment;
 import com.ogirafferes.lxp.learning.domain.model.EnrollmentStatus;
 import com.ogirafferes.lxp.learning.domain.repository.EnrollmentRepository;
-import com.ogirafferes.lxp.learning.domain.repository.LectureProgressRepository;
+//import com.ogirafferes.lxp.learning.domain.repository.LectureProgressRepository;
 import com.ogirafferes.lxp.learning.presentation.dto.EnrollmentWithProgressResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import java.util.Optional;
 public class LearningService {
 
     private final EnrollmentRepository enrollmentRepository;
-    private final LectureProgressRepository lectureProgressRepository;
+//    private final LectureProgressRepository lectureProgressRepository;
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
 
@@ -32,15 +32,15 @@ public class LearningService {
         return enrollmentRepository.findByUserId(userId);
     }
 
-    public Enrollment getEnrollment(Long userId, Long courseId) {
-        return enrollmentRepository.findByUserIdAndCourseId(userId, courseId).orElseThrow(() -> new IllegalArgumentException("Enrollment not found"));
+    public Optional<Enrollment> getEnrollment(Long userId, Long courseId) { // 해당 조회에 대해, 해당 유니크 키를 만족하는 enrollment가 없다면, 빈 것을 출력?
+        return enrollmentRepository.findByUserIdAndCourseId(userId, courseId);
     }
 
     public Enrollment getEnrollmentById(Long enrollmentId) {
         return enrollmentRepository.findById(enrollmentId).orElseThrow(() -> new IllegalArgumentException("Enrollment not found"));
     }
 
-    @Transactional
+    @Transactional // 결제 처리 후 registerEnrollment 호출 을 통해 enrollment 생성
     public Enrollment registerEnrollment(Long userId, Long courseId) {
         // Check if the enrollment already exists
         Optional<Enrollment> existEnrollment = enrollmentRepository.findByUserIdAndCourseId(userId, courseId);
@@ -70,7 +70,7 @@ public class LearningService {
     }
 
     @Transactional
-    public void completeLecture(Long enrollmentId, Long lectureId) {
+    public Long completeLecture(Long enrollmentId, Long lectureId, Long userId) {
         Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
                 .orElseThrow(() -> new IllegalArgumentException("Enrollment not found"));
 
@@ -86,6 +86,7 @@ public class LearningService {
 
         enrollment.completeLecture(lecture);
         enrollmentRepository.save(enrollment);
+        return enrollment.getCourse().getId();
     }
 
     @Transactional(readOnly = true)
@@ -100,6 +101,14 @@ public class LearningService {
         }
 
         return EnrollmentWithProgressResponse.response(enrollment);
+    }
+
+    @Transactional(readOnly = true)
+    public List<EnrollmentWithProgressResponse> getUserEnrollmentsWithProgress(Long userId) {
+        List<Enrollment> enrollments = enrollmentRepository.findByUserId(userId);
+        return enrollments.stream()
+                .map(EnrollmentWithProgressResponse::response)
+                .toList();
     }
 
 }
