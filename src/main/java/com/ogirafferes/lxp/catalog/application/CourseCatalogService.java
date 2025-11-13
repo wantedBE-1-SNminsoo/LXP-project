@@ -43,7 +43,7 @@ public class CourseCatalogService {
 
     @Transactional(readOnly = true)
     public List<Course> getActiveCourses() {
-        return courseRepository.findAllByStatusWithDetails(CourseStatus.ACTIVE);
+        return courseRepository.findAllByStatusWithDetails(CourseStatus.PUBLISHED);
     }
 
     // 강좌 생성 (수정됨)
