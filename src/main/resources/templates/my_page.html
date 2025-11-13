@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>내 학습 현황</title>
+    <style>
+        .enrollment-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: box-shadow 0.3s;
+        }
+        .enrollment-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #4CAF50;
+            transition: width 0.3s;
+        }
+        .course-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .progress-text {
+            margin: 10px 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<h1>내 학습 현황</h1>
+
+<div th:if="${enrollments.isEmpty()}">
+    <p>등록된 강좌가 없습니다.</p>
+    <a href="/courses/active">강좌 둘러보기</a>
+</div>
+
+<div th:each="enrollment : ${enrollments}">
+    <a th:href="@{/courses/{courseId}(courseId=${enrollment.courseId})}" style="text-decoration: none; color: inherit;">
+        <div class="enrollment-card">
+            <div class="course-title" th:text="${enrollment.courseTitle}">강좌 제목</div>
+
+            <div class="progress-text">
+                <span th:text="${enrollment.completedLectureCount}">0</span> /
+                <span th:text="${enrollment.totalLectureCount}">0</span> 강의 완료
+                (<span th:text="${enrollment.progressPercentage}">0</span>%)
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" th:style="'width: ' + ${enrollment.progressPercentage} + '%'"></div>
+            </div>
+        </div>
+    </a>
+</div>
+
+<hr>
+
+<h2>내 게시글 (준비중)</h2>
+<!-- 향후 추가 예정 -->
+</body>
+</html>
