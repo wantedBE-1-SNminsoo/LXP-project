@@ -39,6 +39,12 @@ public class CourseController {
     public String detail(@PathVariable Long courseId, Model model) {
         Course course = courseCatalogService.getCourseWithLectures(courseId);
         model.addAttribute("course", course);
+
+        // 반드시 isEnrolled를 false로 설정 (null이 되지 않도록)
+        boolean isEnrolled = false;
+
+        model.addAttribute("isEnrolled", isEnrolled);
+
         return "catalog/course-detail";
     }
 

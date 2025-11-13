@@ -35,6 +35,25 @@
     <p><strong>강사:</strong> <span th:text="${course.instructor?.nickname}">강사명</span></p>
     <p><strong>생성일:</strong> <span th:text="${#temporals.format(course.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
 </div>
+<!-- 수강 상태에 따른 버튼 표시 (null 안전 처리) -->
+<div class="action-buttons">
+    <!-- 수강 중인 경우 -->
+    <a th:if="${isEnrolled != null and isEnrolled}"
+       th:href="@{/learning/courses/{id}/lectures(id=${course.id})}"
+       class="btn-primary">
+        📚 수강하러 가기
+    </a>
+
+    <!-- 수강 중이 아닌 경우 (isEnrolled가 null이거나 false인 경우) -->
+    <form th:if="${isEnrolled == null or !isEnrolled}"
+          th:action="@{/cart/add}"
+          method="post"
+          style="display: inline;">
+        <input type="hidden" name="courseId" th:value="${course.id}" />
+        <button type="submit" class="btn-success">🛒 장바구니 담기</button>
+    </form>
+</div>
+
 
 <h2>강의 목록</h2>
 <table border="1">
