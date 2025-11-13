@@ -10,9 +10,8 @@ import java.util.Optional;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
-
-
-    @Query("SELECT c FROM Course c JOIN FETCH c.lectures WHERE c.id = :id")
+    // 수정: JOIN FETCH → LEFT JOIN FETCH (강의가 없어도 강좌 조회 가능)
+    @Query("SELECT c FROM Course c LEFT JOIN FETCH c.lectures WHERE c.id = :id")
     Optional<Course> findByIdWithLectures(@Param("id") Long id);
 
     @Query("SELECT DISTINCT c FROM Course c " +
@@ -25,6 +24,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             "LEFT JOIN FETCH c.lectures " +
             "WHERE c.id = :id")
     Optional<Course> findByIdWithLecturesAndCategory(@Param("id") Long id);
+
+
     // 강좌 제목으로 조회 (부분일치 검색 지원)
     List<Course> findByTitleContaining(String keyword);
 

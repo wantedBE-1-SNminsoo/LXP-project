@@ -1,5 +1,6 @@
 package com.ogirafferes.lxp.community.domain.model;
 
+import com.ogirafferes.lxp.identity.domain.model.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -28,8 +29,9 @@ public class Post {
     @Column(name = "post_id")
     private Long Id;
 
-    @Column(name = "author_id")
-    private Long authorId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    private User author;
 
     @Column(name = "title")
     private String title;
@@ -47,10 +49,10 @@ public class Post {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public static Post create(Long authorId, String title, String content, PostType postType){
+    public static Post create(User author, String title, String content, PostType postType){
         Post post = new Post();
 
-        post.authorId = authorId;
+        post.author = author;
         post.title = title;
         post.content = content;
         post.postType = postType;
