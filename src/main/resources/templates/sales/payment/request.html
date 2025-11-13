@@ -3,166 +3,31 @@
 <head>
     <title>💳 안전한 결제 요청</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        /* 1. 전체 기본 스타일 */
-        body {
-            font-family: 'Noto Sans KR', Arial, sans-serif;
-            /* 💡 login.html의 그라데이션 배경 */
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* 2. 결제 컨테이너 스타일 */
-        .payment-container {
-            max-width: 480px;
-            width: 100%;
-            background-color: #ffffff;
-            margin: auto;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        /* 3. 제목 및 섹션 스타일 */
-        h2 {
-            text-align: center;
-            color: #333333;
-            margin-bottom: 25px;
-            font-weight: 700;
-        }
-
-        h3 {
-            color: #555555;
-            border-left: 4px solid #4a90e2;
-            padding-left: 10px;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            font-size: 1.1em;
-        }
-
-        /* 4. 주문 상품 목록 스타일 (영수증 스타일 적용) */
-        .item-list {
-            background-color: #fcfcfc;
-            border-radius: 8px;
-            padding: 0 5px;
-            border: none;
-        }
-
-        .item-list div {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            font-size: 0.95em;
-            color: #444444;
-        }
-
-        /* 5. 영수증 구분선 */
-        .receipt-divider {
-            border-top: 2px dashed #bbbbbb;
-            margin: 15px 0;
-        }
-
-        /* 6. 최종 결제 금액 스타일 (영수증 스타일 적용) */
-        .total-amount {
-            background-color: #e6f0fa;
-            font-weight: 700;
-            padding: 15px;
-            margin-top: 0;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #d0e0f0;
-        }
-
-        .total-amount span {
-            font-size: 1.2em;
-            color: #d93025;
-        }
-
-        /* 7. 결제 수단 선택 스타일 (그리드 형식으로 변경) */
-        .payment-options {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3블록으로 균등하게 나눔 */
-            gap: 15px;
-            padding: 5px 0;
-        }
-
-        .payment-options label {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: #ffffff;
-            border: 2px solid #dddddd;
-            border-radius: 12px;
-            padding: 15px 10px;
-            min-height: 80px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            line-height: 1.4;
-            font-size: 0.9em;
-            color: #555555;
-            position: relative; /* 라디오 버튼 숨기기를 위해 필요 */
-        }
-
-        /* 라디오 버튼 숨기기 */
-        .payment-options input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        /* 선택되었을 때 라벨 스타일 */
-        .payment-options label:has(input[type="radio"]:checked) {
-            border-color: #1a73e8;
-            background-color: #e6f0fa;
-        }
-
-        .payment-options input[type="radio"]:checked + .payment-method-icon {
-            color: #1a73e8;
-        }
-
-        .payment-options label:hover {
-            border-color: #a4c8f5;
-            background-color: #f0f7ff;
-        }
-
-        .payment-method-icon {
-            font-size: 1.8em;
-            margin-bottom: 5px;
-        }
-
-        /* 8. 결제 버튼 스타일 */
-        .btn-pay {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: #1a73e8;
-            color: white;
-            font-size: 1.1em;
-            font-weight: 700;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 30px;
-            transition: background-color 0.2s;
-        }
-
-        .btn-pay:hover {
-            background-color: #155bb9;
-        }
-    </style>
 </head>
 <body>
+
+<header class="header">
+    <div class="container">
+        <a th:href="@{/}" class="logo">LXP</a>
+        <nav class="nav">
+            <div class="nav-left">
+                <a th:href="@{/}">Home</a>
+                <a th:href="@{/courses}">Courses</a>
+                <a th:href="@{/my/courses}">내 강좌 관리</a>
+                <a th:href="@{/community/post}">Community</a>
+            </div>
+            <div class="nav-right">
+                <a th:href="@{/my_page}">My Page</a>
+                <a th:href="@{/cart}">🛒 장바구니</a>
+                <form th:action="@{/auth/logout}" method="post" style="display: inline-block;">
+                    <button type="submit" class="btn btn-secondary">Logout</button>
+                </form>
+            </div>
+        </nav>
+    </div>
+</header>
 
 <div class="payment-container">
     <h2>💳 안전한 결제 요청</h2>
@@ -195,12 +60,6 @@
                 <input type="radio" name="paymentMethod" value="MINSUPAY" id="radio-minsu" required>
                 <div class="payment-method-icon">💪</div>
                 <span>민수 페이</span>
-            </label>
-
-            <label for="radio-account">
-                <input type="radio" name="paymentMethod" value="ACCOUNT" id="radio-account" required>
-                <div class="payment-method-icon"> 💸 </div>
-                <span>계좌 이체</span>
             </label>
 
         </div>

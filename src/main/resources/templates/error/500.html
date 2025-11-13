@@ -2,7 +2,8 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>LXP - Main</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서버 오류</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
@@ -28,20 +29,12 @@
     </div>
 </header>
 
-<div class="container">
-    <h2>Courses</h2>
-    <div class="course-grid">
-        <!-- 컨트롤러에서 전달받은 courses를 반복하여 표시 -->
-        <div class="course-card" th:each="course : ${courses}">
-            <h3 th:text="${course.title}">Course Title</h3>
-            <p th:text="${course.description}">Course description...</p>
-            <a th:href="@{/courses/{id}(id=${course.id})}" class="btn btn-primary">자세히 보기</a>
-        </div>
-
-        <!-- 만약 강좌가 없다면 보여줄 메시지 (선택 사항) -->
-        <div th:if="${#lists.isEmpty(courses)}">
-            <p>현재 수강 가능한 강좌가 없습니다.</p>
-        </div>
+<div class="container" style="text-align: center;">
+    <h1 style="color: #e74c3c;">500 Internal Server Error</h1>
+    <p th:text="${error}">죄송합니다. 서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.</p>
+    <div style="margin-top: 30px;">
+        <a href="/" class="btn btn-primary">홈으로 돌아가기</a>
+        <a href="javascript:history.back()" class="btn btn-secondary">이전 페이지로</a>
     </div>
 </div>
 

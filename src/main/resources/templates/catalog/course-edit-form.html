@@ -3,48 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>강좌 수정</title>
-    <style>
-        body { margin: 0; font-family: Arial, Helvetica, sans-serif; }
-        .navbar { background-color: #2b2b2b; padding: 12px 24px; display: flex; gap: 18px; }
-        .navbar a { color: white; text-decoration: none; font-size: 16px; }
-        .navbar a:hover { text-decoration: underline; }
-        .container { margin: 40px auto; width: 80%; }
-        .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        .course-card { border: 1px solid #aaa; padding: 20px; border-radius: 6px; height: 180px; }
-        .course-card h3 { margin-top: 0; font-size: 18px; }
-        .course-card a { display: inline-block; margin-top: 8px; color: #0066ff; text-decoration: none; }
-        .course-card a:hover { text-decoration: underline; }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-<nav class="navbar">
-    <a th:href="@{/courses}">Courses</a>
-    <a th:href="@{/users/me}">My Page</a>
-    <a th:href="@{/auth/login}">Logout</a>
-    <a th:href="@{/community}">Community</a>
-    <a th:href="@{/}">Home</a>
 
-</nav>
-<h1>강좌 수정</h1>
-
-<form th:action="@{/courses/{id}/edit(id=${course.id})}" method="post">
-    <div>
-        <label for="title">강좌 제목:</label>
-        <input type="text" id="title" name="title" th:value="${course.title}" required />
+<header class="header">
+    <div class="container">
+        <a th:href="@{/}" class="logo">LXP</a>
+        <nav class="nav">
+            <div class="nav-left">
+                <a th:href="@{/}">Home</a>
+                <a th:href="@{/courses}">Courses</a>
+                <a th:href="@{/my/courses}">내 강좌 관리</a>
+                <a th:href="@{/community/post}">Community</a>
+            </div>
+            <div class="nav-right">
+                <a th:href="@{/my_page}">My Page</a>
+                <a th:href="@{/cart}">🛒 장바구니</a>
+                <form th:action="@{/auth/logout}" method="post" style="display: inline-block;">
+                    <button type="submit" class="btn btn-secondary">Logout</button>
+                </form>
+            </div>
+        </nav>
     </div>
+</header>
 
-    <div>
-        <label for="description">설명:</label>
-        <textarea id="description" name="description" rows="5" th:text="${course.description}"></textarea>
-    </div>
+<div class="container">
+    <h1>강좌 수정</h1>
 
-    <div>
-        <label for="price">가격:</label>
-        <input type="number" id="price" name="price" th:value="${course.price}" step="0.01" required />
-    </div>
+    <form th:action="@{/courses/{id}/edit(id=${course.id})}" method="post">
+        <div class="form-group">
+            <label for="title">강좌 제목:</label>
+            <input type="text" id="title" name="title" th:value="${course.title}" required />
+        </div>
 
-    <button type="submit">수정</button>
-    <a th:href="@{/courses/{id}(id=${course.id})}">취소</a>
-</form>
+        <div class="form-group">
+            <label for="description">설명:</label>
+            <textarea id="description" name="description" rows="5" th:text="${course.description}"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="price">가격:</label>
+            <input type="number" id="price" name="price" th:value="${course.price}" step="0.01" required />
+        </div>
+
+        <button type="submit" class="btn">수정</button>
+        <a th:href="@{/courses/{id}(id=${course.id})}" class="btn btn-secondary">취소</a>
+    </form>
+</div>
 </body>
 </html>

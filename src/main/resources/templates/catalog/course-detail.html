@@ -1,91 +1,83 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>강좌 상세</title>
-    <style>
-        body { margin: 0; font-family: Arial, Helvetica, sans-serif; }
-        .navbar { background-color: #2b2b2b; padding: 12px 24px; display: flex; gap: 18px; }
-        .navbar a { color: white; text-decoration: none; font-size: 16px; }
-        .navbar a:hover { text-decoration: underline; }
-        .container { margin: 40px auto; width: 80%; }
-        .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        .course-card { border: 1px solid #aaa; padding: 20px; border-radius: 6px; height: 180px; }
-        .course-card h3 { margin-top: 0; font-size: 18px; }
-        .course-card a { display: inline-block; margin-top: 8px; color: #0066ff; text-decoration: none; }
-        .course-card a:hover { text-decoration: underline; }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-<nav class="navbar">
-    <a th:href="@{/courses}">Courses</a>
-    <a th:href="@{/users/me}">My Page</a>
-    <a th:href="@{/auth/login}">Logout</a>
-    <a th:href="@{/community}">Community</a>
-    <a th:href="@{/}">Home</a>
 
-</nav>
-<h1 th:text="${course.title}">강좌 제목</h1>
+<header class="header">
+    <div class="container">
+        <a th:href="@{/}" class="logo">LXP</a>
+        <nav class="nav">
+            <div class="nav-left">
+                <a th:href="@{/}">Home</a>
+                <a th:href="@{/courses}">Courses</a>
+                <a th:href="@{/my/courses}">내 강좌 관리</a>
+                <a th:href="@{/community/post}">Community</a>
+            </div>
+            <div class="nav-right">
+                <a th:href="@{/my_page}">My Page</a>
+                <a th:href="@{/cart}">🛒 장바구니</a>
+                <form th:action="@{/auth/logout}" method="post" style="display: inline-block;">
+                    <button type="submit" class="btn btn-secondary">Logout</button>
+                </form>
+            </div>
+        </nav>
+    </div>
+</header>
 
-<div>
-    <p><strong>설명:</strong> <span th:text="${course.description}">강좌 설명</span></p>
-    <p><strong>가격:</strong> <span th:text="${course.price}">50000</span></p>
-    <p><strong>상태:</strong> <span th:text="${course.courseStatus}">ACTIVE</span></p>
-    <p><strong>카테고리:</strong> <span th:text="${course.category?.name}">프로그래밍</span></p>
-    <p><strong>강사:</strong> <span th:text="${course.instructor?.nickname}">강사명</span></p>
-    <p><strong>생성일:</strong> <span th:text="${#temporals.format(course.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+<div class="container">
+    <h1 th:text="${course.title}">강좌 제목</h1>
+
+    <div>
+        <p><strong>설명:</strong> <span th:text="${course.description}">강좌 설명</span></p>
+        <p><strong>가격:</strong> <span th:text="${course.price}">50000</span></p>
+        <p><strong>상태:</strong> <span th:text="${course.courseStatus}">ACTIVE</span></p>
+        <p><strong>카테고리:</strong> <span th:text="${course.category?.name}">프로그래밍</span></p>
+        <p><strong>강사:</strong> <span th:text="${course.instructor?.nickname}">강사명</span></p>
+        <p><strong>생성일:</strong> <span th:text="${#temporals.format(course.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+    </div>
+
+    <div class="action-buttons" style="margin: 20px 0;">
+        <a th:if="${isEnrolled != null and isEnrolled}"
+           th:href="@{/learning/courses/{id}/lectures(id=${course.id})}"
+           class="btn btn-primary">
+            📚 수강하러 가기
+        </a>
+
+        <form th:if="${isEnrolled == null or !isEnrolled}"
+              th:action="@{/cart/add}"
+              method="post"
+              style="display: inline;">
+            <input type="hidden" name="courseId" th:value="${course.id}" />
+            <button type="submit" class="btn btn-secondary">🛒 장바구니 담기</button>
+        </form>
+    </div>
+
+    <h2>강의 목록</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>순서</th>
+            <th>강의명</th>
+            <th>URL</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="lecture : ${course.lectures}">
+            <td th:text="${lecture.lectureOrder}">1</td>
+            <td th:text="${lecture.title}">강의 제목</td>
+            <td th:text="${lecture.contentUrl}">URL</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div style="margin-top: 20px;">
+        <a th:href="@{/courses/{id}/edit(id=${course.id})}" class="btn">수정</a>
+        <a href="/courses" class="btn btn-secondary">목록으로</a>
+    </div>
 </div>
-<!-- 수강 상태에 따른 버튼 표시 (null 안전 처리) -->
-<div class="action-buttons">
-    <!-- 수강 중인 경우 -->
-    <a th:if="${isEnrolled != null and isEnrolled}"
-       th:href="@{/learning/courses/{id}/lectures(id=${course.id})}"
-       class="btn-primary">
-        📚 수강하러 가기
-    </a>
-
-    <!-- 수강 중이 아닌 경우 (isEnrolled가 null이거나 false인 경우) -->
-    <form th:if="${isEnrolled == null or !isEnrolled}"
-          th:action="@{/cart/add/{courseId}(courseId=${course.id})}"
-          method="post"
-          style="display: inline;">
-        <button type="submit" class="btn-success">🛒 장바구니 담기</button>
-    </form>
-</div>
-
-
-<h2>강의 목록</h2>
-<table border="1">
-    <thead>
-    <tr>
-        <th>순서</th>
-        <th>강의명</th>
-        <th>URL</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="lecture : ${course.lectures}">
-        <td th:text="${lecture.lectureOrder}">1</td>
-        <td th:text="${lecture.title}">강의 제목</td>
-        <td th:text="${lecture.contentUrl}">URL</td>
-    </tr>
-    </tbody>
-</table>
-
-<div>
-    <a th:href="@{/courses/{id}/edit(id=${course.id})}">수정</a>
-    <a href="/courses">목록으로</a>
-</div>
-
-<script th:inline="javascript">
-    // Flash Attribute로 전달된 'errorMessage' 변수를 Thymeleaf가 JavaScript 변수로 변환
-    const errorMessage = /*[[${errorMessage}]]*/ 'default message';
-
-    // 메시지가 null이거나 비어있지 않은지 확인합니다.
-    // Flash Attribute는 사용 후 사라지므로, 리다이렉트 후 단 한 번만 메시지가 담겨 있습니다.
-    if (errorMessage && errorMessage !== 'default message') {
-        alert(errorMessage);
-    }
-</script>
 </body>
 </html>

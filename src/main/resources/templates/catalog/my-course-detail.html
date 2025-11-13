@@ -3,38 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <title>강의 관리</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-<h1 th:text="${course.title}">강좌명</h1>
-<p><strong>상태:</strong> <span th:text="${course.courseStatus}"></span></p>
 
-<h2>강의 목록</h2>
-<a th:href="@{/my/courses/{id}/lectures/new(id=${course.id})}">강의 추가</a>
+<header class="header">
+    <div class="container">
+        <a th:href="@{/}" class="logo">LXP</a>
+        <nav class="nav">
+            <div class="nav-left">
+                <a th:href="@{/}">Home</a>
+                <a th:href="@{/courses}">Courses</a>
+                <a th:href="@{/my/courses}">내 강좌 관리</a>
+                <a th:href="@{/community/post}">Community</a>
+            </div>
+            <div class="nav-right">
+                <a th:href="@{/my_page}">My Page</a>
+                <a th:href="@{/cart}">🛒 장바구니</a>
+                <form th:action="@{/auth/logout}" method="post" style="display: inline-block;">
+                    <button type="submit" class="btn btn-secondary">Logout</button>
+                </form>
+            </div>
+        </nav>
+    </div>
+</header>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>순서</th>
-        <th>강의명</th>
-        <th>URL</th>
-        <th>관리</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="lecture : ${course.lectures}">
-        <td th:text="${lecture.lectureOrder}">1</td>
-        <td th:text="${lecture.title}">강의명</td>
-        <td th:text="${lecture.contentUrl}">URL</td>
-        <td>
-            <form th:action="@{/my/courses/{cid}/lectures/{lid}/delete(cid=${course.id},lid=${lecture.id})}"
-                  method="post" style="display:inline;">
-                <button type="submit">삭제</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div class="container">
+    <h1 th:text="${course.title}">강좌명</h1>
+    <p><strong>상태:</strong> <span th:text="${course.courseStatus}"></span></p>
 
-<a href="/my/courses">강좌 목록으로</a>
+    <div class="actions" style="margin-bottom: 20px;">
+        <a th:href="@{/my/courses/{id}/lectures/new(id=${course.id})}" class="btn">강의 추가</a>
+    </div>
+
+    <h2>강의 목록</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>순서</th>
+            <th>강의명</th>
+            <th>URL</th>
+            <th>관리</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="lecture : ${course.lectures}">
+            <td th:text="${lecture.lectureOrder}">1</td>
+            <td th:text="${lecture.title}">강의명</td>
+            <td th:text="${lecture.contentUrl}">URL</td>
+            <td>
+                <form th:action="@{/my/courses/{cid}/lectures/{lid}/delete(cid=${course.id},lid=${lecture.id})}"
+                      method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">삭제</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="/my/courses" class="btn btn-secondary" style="margin-top: 20px;">강좌 목록으로</a>
+</div>
 </body>
 </html>
