@@ -9,9 +9,11 @@ import com.ogirafferes.lxp.catalog.domain.service.CourseDomainService;
 import com.ogirafferes.lxp.catalog.presentation.dto.CourseCreateRequest;
 import com.ogirafferes.lxp.catalog.presentation.dto.LectureCreateRequest;
 import com.ogirafferes.lxp.identity.application.adapter.CustomUserPrincipal;
+import com.ogirafferes.lxp.catalog.domain.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +28,7 @@ public class MyCourseController {
     private final CourseCatalogService courseCatalogService;
     private final LectureService lectureService;
     private final CourseDomainService courseDomainService;
+    private final CourseRepository courseRepository;
 
     // 내가 개설한 강좌 목록
     @GetMapping
@@ -71,6 +74,7 @@ public class MyCourseController {
     }
 
     @PostMapping("/{courseId}/change-status") // 해당 서비스 button으로 호출
+    @Transactional
     public String changeCourseStatus(@PathVariable Long courseId,
                                      @AuthenticationPrincipal CustomUserPrincipal userPrincipal) {
         Course course = courseCatalogService.getCourseDetail(courseId);
@@ -83,6 +87,7 @@ public class MyCourseController {
         } else  {
             courseDomainService.deactivateCourse(course);
         }
+        courseRepository.save(course); // 변경된 Course 객체를 저장
         return "redirect:/my/courses/" + courseId;
     }
 
